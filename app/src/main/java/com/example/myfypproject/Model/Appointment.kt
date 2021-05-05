@@ -1,6 +1,6 @@
 package com.example.myfypproject.Model
 
-data class Test(
-    val name: String,
-    val age: String
+data class Account(
+    val username: String,
+    val password: String
 )

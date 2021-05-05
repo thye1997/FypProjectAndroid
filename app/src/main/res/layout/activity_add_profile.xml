@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addExist_profile_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    >
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_nric_txtInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/nric"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_NRIC_value_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/search_result_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_nric_txtInputLayout"
+        android:visibility="gone"
+        >
+
+    <LinearLayout
+        android:id="@+id/search_result_1st_row_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/search_fullName_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="@string/search_fullname"
+            android:textSize="16dp"
+            android:layout_weight="0.05"
+            />
+        <TextView
+            android:id="@+id/search_fullName_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Low Chen Thye"
+            tools:text="Low Chen Thye" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_result_2nd_row_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_result_1st_row_layout"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/search_phoneNum_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Phone Number:"
+            android:textSize="16dp"
+            android:layout_weight="0.05"
+            />
+        <TextView
+            android:id="@+id/search_phoneNum_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            tools:text="018-9678543" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_result_3rd_row_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_result_2nd_row_layout"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/search_gender_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Gender:"
+            android:textSize="16dp"
+            android:layout_weight="0.05"
+            />
+        <TextView
+            android:id="@+id/search_gender_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            tools:text="Male" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_result_4th_row_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_result_3rd_row_layout"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/search_dob_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date of birth:"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:layout_weight="0.05"
+            />
+        <TextView
+            android:id="@+id/search_dob_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            tools:text="25-08-1997" />
+    </LinearLayout>
+
+    </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/relationship_txtInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:hint="Relationship"
+        android:visibility="gone"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_result_layout"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/relationship_input_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/search_profile_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:textColor="@android:color/white"
+        android:text="@string/search_existing_profile"
+        android:textSize="16sp"
+        android:background="@drawable/curve_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_nric_txtInputLayout"
+        app:layout_constraintVertical_bias="0.2" />
+    <TextView
+        android:id="@+id/create_newProfile_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="@string/create_new_profile"
+        style="@style/TextColor"
+        app:layout_constraintTop_toBottomOf="@+id/search_profile_btn"
+        android:textSize="16sp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/add_profile_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:textColor="@android:color/white"
+        android:text="@string/Add_profile"
+        android:textSize="16sp"
+        android:background="@drawable/curve_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/relationship_txtInputLayout"
+        app:layout_constraintVertical_bias="0.2" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

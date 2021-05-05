@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:id="@+id/announcement_pref_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Application Notification"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="14sp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/app_push_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            />
+    </RelativeLayout>
+    <View
+        android:id="@+id/divider_1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@id/announcement_pref_layout"
+        android:background="@drawable/grey_curve_button"
+        />
+    <RelativeLayout
+        android:id="@+id/apptReminder_pref_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_1"
+        >
+        <TextView
+            android:id="@+id/apptReminder_pref_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="Appointment Reminder"
+            android:textStyle="bold"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/appt_app_push_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Application Reminder Notification"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="14sp"
+            android:layout_below="@id/apptReminder_pref_title"
+            />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/appt_app_push_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_below="@id/apptReminder_pref_title"
+            />
+
+        <TextView
+            android:id="@+id/appt_sms_push_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="SMS Reminder Notification"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="14sp"
+            android:layout_below="@id/appt_app_push_label"
+            />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/appt_sms_push_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_below="@id/appt_app_push_label"
+            />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider_2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@id/apptReminder_pref_layout"
+        android:background="@drawable/grey_curve_button"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
