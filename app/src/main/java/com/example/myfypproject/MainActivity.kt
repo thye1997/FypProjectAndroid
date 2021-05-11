@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import com.example.myfypproject.Base.BaseActivity
+import com.example.myfypproject.Base.FragmentName
+import com.example.myfypproject.Base.FragmentType
 import com.example.myfypproject.FCM.FCMListener
 import com.example.myfypproject.FCM.MyFirebaseService
 import com.example.myfypproject.Fragment.*
@@ -17,6 +19,7 @@ import com.example.myfypproject.ViewModel.AppointmentViewModel
 import com.example.myfypproject.ViewModel.ClickViewModel
 import com.example.myfypproject.ViewModel.UserViewModel
 import com.example.myfypproject.session.SessionManager
+import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
@@ -31,8 +34,6 @@ class MainActivity : BaseActivity() {
             activity.startActivity(intent)
         }
     }
-    var pageTitle = ""
-
     override var titleOfView: String = ""
      val apptViewModel: AppointmentViewModel by viewModels()
     val userViewModel: UserViewModel by viewModels()
@@ -64,17 +65,14 @@ class MainActivity : BaseActivity() {
             replace(R.id.fragment_container,fragment,pageTitle)
             commit()
         }
-
     private fun attachObserver(){
         apptViewModel.isLoadingVal.observe(this, {
            it?.let {showProgressBar(it) }
         })
         userViewModel.GeneralResponse.observe(this,{
             it?.let {
-                //baseToastMessage(it?.message)
             }
         })
-
     }
     private fun attachFragmentObserver(){
         clickViewModel.fragmentNameVal.observe(this,{
@@ -82,21 +80,22 @@ class MainActivity : BaseActivity() {
                  onFragmentChange(it)
              }
         })
+        clickViewModel.isLoading.observe(this,{
+            showProgressBar(it)
+        })
+        clickViewModel.isCheckIn.observe(this,{
+                inflateQRIcon(it)
+        })
     }
     private fun onFragmentChange(fragmentName : String){
         toolBarTitle(fragmentName)
     }
+
+    override fun onAttachFragment(fragment: Fragment) {
+        super.onAttachFragment(fragment)
+    }
     override fun onBackPressed() {
-        //val fraglist = supportFragmentManager.fragments
-        val fragment = supportFragmentManager.findFragmentByTag("AD")
-        if(fragment !=null && fragment?.isAdded!! && fragment.isVisible)
-        {
-            val notificationFragment= NotificationFragment()
-            setCurrentFragment("Notification", notificationFragment)
-        }
-        else{
-            shuntDownApp()
-        }
+        checkFragmentState()
     }
     private fun UpdateFCMToken(){
         val accId = SessionManager.GetaccId
@@ -106,5 +105,46 @@ class MainActivity : BaseActivity() {
                 userViewModel.SendFCMToken(FCMTokenRequest)
             }
         })
+    }
+    private fun inflateQRIcon(it: Boolean){
+        if(it){
+            baseToolbar.inflateMenu(R.menu.qr_menu)
+        }
+        else{
+            baseToolbar.menu.clear()
+        }
+        base_toolbar.setOnMenuItemClickListener {
+            if(it.itemId ==R.id.qr_code_btn){
+                val qrCodeFragment = QRCodeFragment()
+                setCurrentFragment(FragmentName.CheckIn,qrCodeFragment)
+            }
+            true
+        }
+    }
+    private fun checkFragmentState(){
+        val fragment = supportFragmentManager
+        val backStackFragment = fragment.findFragmentByTag(FragmentType.InnerFragment)
+        val totalFrag = fragment.backStackEntryCount
+        if(fragment !=null){
+            if(backStackFragment !=null && backStackFragment?.isAdded!! && backStackFragment.isVisible){
+                fragment.popBackStack()
+            }
+            else{
+                shuntDownApp()
+            }
+        }
+        else{
+            shuntDownApp()
+        }
+
+        /*for(i in 0 until totalFrag){
+            if(fragment.getBackStackEntryAt(i).name.toString() == FragmentType.InnerFragment){
+                fragment.popBackStack()
+            }
+            else{
+                shuntDownApp()
+            }
+            //baseToastMessage(fragment.getBackStackEntryAt(i).name.toString())
+        }*/
     }
 }

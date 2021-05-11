@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.myfypproject.Fragment.Appointment.NoShowFragment
-import com.example.myfypproject.Fragment.Appointment.PastFragment
 import com.example.myfypproject.Fragment.Appointment.UpcomingFragment
 
 class NotificationTabAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.*
+import com.example.myfypproject.Base.BaseFragment
 import com.example.myfypproject.Model.Account
 import com.example.myfypproject.R
 import com.example.myfypproject.ViewModel.AppointmentViewModel
@@ -16,27 +17,24 @@ import kotlinx.android.synthetic.main.fragment_first.*
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment()  {
     private val apptViewModel: AppointmentViewModel by activityViewModels()
-    private val registry = LifecycleRegistry(this)
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+    override fun FragmentCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_first, container, false)
-
     }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
+    override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
         attachObserver()
         onScroll()
-
     }
 
-    private fun attachObserver(){
-       apptViewModel.userDataResponse.observe(viewLifecycleOwner, Observer<Account>{
-           it?.let {
-           }
-       })
+    override fun attachObserver() {
     }
+
     private fun onScroll(){
         home_scrollview.setOnRefreshListener {
             Toast.makeText(

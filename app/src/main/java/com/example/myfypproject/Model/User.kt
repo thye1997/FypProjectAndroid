@@ -46,6 +46,17 @@ val phoneNumber:String="",
 val gender:String="",
 val dob:String="",
 )
+data class DefaultProfileData(
+    val accId:Int,
+    val accountRegistered:String="",
+    val profileId: Int=0,
+    val nric: String="",
+    val fullName:String="",
+    val phoneNumber:String="",
+    val gender:String="",
+    val dob:String="",
+)
+
 data class SwitchProfileRequest(
     val accId:Int,
     val id:Int,

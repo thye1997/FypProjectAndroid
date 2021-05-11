@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragment.Appointment.AppointmentDetailFragment"
+    android:id="@+id/appt_detail_layout"
+    android:layout_margin="16dp"
+    >
+
+
+        <!--attending username layout-->
+        <LinearLayout
+            android:id="@+id/apptDetail_user_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+            <TextView
+                android:id="@+id/apptDetail_username_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/appointment_details_text_label"
+                android:text="Name: "
+                android:layout_weight="0.05"
+                />
+            <TextView
+                android:id="@+id/apptDetail_username_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="Low Chen Thye" />
+        </LinearLayout>
+    <!--attending hp layout-->
+    <LinearLayout
+        android:id="@+id/apptDetail_phoneNum_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_below="@id/apptDetail_user_name_layout">
+        <TextView
+            android:id="@+id/apptDetail_phoneNum_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/appointment_details_text_label"
+            android:text="@string/PhoneNumber_label"
+            android:layout_weight="0.05"
+            />
+        <TextView
+            android:id="@+id/apptDetail_phoneNum_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            tools:text="018-9678543" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/apptDetail_gender_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_below="@id/apptDetail_phoneNum_layout">
+        <TextView
+            android:id="@+id/apptDetail_gender_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/appointment_details_text_label"
+            android:text="@string/Gender_label"
+            android:layout_weight="0.05"
+            />
+        <TextView
+            android:id="@+id/apptDetail_gender_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            tools:text="Male" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/apptDetail_dob_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_below="@id/apptDetail_gender_layout">
+        <TextView
+            android:id="@+id/apptDetail_dob_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/appointment_details_text_label"
+            android:text="@string/DOB_label"
+            android:layout_weight="0.05"
+            />
+        <TextView
+            android:id="@+id/apptDetail_dob_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            tools:text="25-08-1997" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
+import com.example.myfypproject.Base.BaseFragment
 import com.example.myfypproject.Base.FragmentName
+import com.example.myfypproject.Base.FragmentType
 import com.example.myfypproject.Fragment.Appointment.ApptTabAdapter
 import com.example.myfypproject.R
 import com.example.myfypproject.ViewModel.ClickViewModel
@@ -18,23 +20,25 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_second.*
 
-class ProfileFragment : Fragment() {
-    private val clickViewModel: ClickViewModel by activityViewModels()
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+class ProfileFragment : BaseFragment() {
+    override fun FragmentCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
         initScreen()
     }
+    override fun attachObserver() {
+    }
+
     private fun initScreen(){
         logoutClickListener()
         notificationPrefClickListener()
         switchProfileClickListener()
+        editProfileClickListener()
     }
     private fun logoutClickListener(){
         logout_layout.setOnClickListener {
@@ -60,26 +64,21 @@ class ProfileFragment : Fragment() {
         notification_pref_layout.setOnClickListener {
             val notificationPrefFragment = NotificationPrefFragment()
             clickViewModel.SetCurrentFragment(FragmentName.NotificationPreferences)
-            activity?.supportFragmentManager?.beginTransaction()?.apply {
-                replace(
-                    R.id.fragment_container,
-                    notificationPrefFragment, "NF"
-                )
-                commit()
-            }
+            setFragmentWithBackStack(notificationPrefFragment,FragmentType.InnerFragment)
         }
     }
     private fun switchProfileClickListener(){
         switch_profile_layout.setOnClickListener {
             val switchProfileFragment = SwitchProfileFragment()
             clickViewModel.SetCurrentFragment(FragmentName.SwitchProfile)
-            activity?.supportFragmentManager?.beginTransaction()?.apply {
-                replace(
-                    R.id.fragment_container,
-                    switchProfileFragment, "SP"
-                )
-                commit()
-            }
+            setFragmentWithBackStack(switchProfileFragment,FragmentType.InnerFragment)
+        }
+    }
+    private fun editProfileClickListener(){
+        edit_profile_layout.setOnClickListener {
+            val editProfileFragment = EditProfileFragment()
+            clickViewModel.SetCurrentFragment(FragmentName.EditProfile)
+            setFragmentWithBackStack(editProfileFragment,FragmentType.InnerFragment)
         }
     }
 }

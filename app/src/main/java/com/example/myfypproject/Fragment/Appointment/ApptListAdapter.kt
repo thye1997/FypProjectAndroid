@@ -9,10 +9,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myfypproject.Model.ApptListData
 import com.example.myfypproject.R
 
 
-class ApptListAdapter(context: Context, private val itemList: ArrayList<String>) : BaseAdapter(){
+class ApptListAdapter(context: Context, private val itemList: ArrayList<ApptListData>) : BaseAdapter(){
 
 
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -34,9 +35,7 @@ class ApptListAdapter(context: Context, private val itemList: ArrayList<String>)
         val holder: ViewHolder
 
         if (convertView == null) {
-
             view = inflater.inflate(R.layout.custom_appt_list, parent, false)
-
             holder = ViewHolder()
             holder.username = view.findViewById(R.id.appt_username_txt) as TextView
             holder.status = view.findViewById(R.id.appt_status_val) as TextView
@@ -58,6 +57,12 @@ class ApptListAdapter(context: Context, private val itemList: ArrayList<String>)
         val date = holder.date
         val service = holder.service
 
+        username.text = itemList[position].fullName
+        status.text = itemList[position].apptStatusString
+        startTime.text = itemList[position].startTime
+        endTime.text = itemList[position].endTime
+        date.text = itemList[position].date
+        service.text = itemList[position].service
         return view
     }
 

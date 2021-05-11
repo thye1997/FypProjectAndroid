@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.example.myfypproject.Base.BaseFragment
+import com.example.myfypproject.Base.FragmentType
 import com.example.myfypproject.Fragment.Appointment.ApptListAdapter
 import com.example.myfypproject.Model.Account
 import com.example.myfypproject.Model.NotificationListResponse
@@ -18,24 +20,23 @@ import com.example.myfypproject.ViewModel.NotificationViewModel
 import kotlinx.android.synthetic.main.fragment_announcement.*
 import kotlinx.android.synthetic.main.fragment_upcoming.*
 
-class AnnouncementFragment : Fragment() {
+class AnnouncementFragment : BaseFragment() {
     private val notificationViewModel: NotificationViewModel by activityViewModels()
     private  lateinit var  adapter: NotificationListAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    override fun FragmentCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         return inflater.inflate(R.layout.fragment_announcement, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
         notificationViewModel.NotificationList()
-            attachObserver()
     }
 
-    private fun attachObserver(){
+    override fun attachObserver(){
         notificationViewModel.notificationListResponse.observe(viewLifecycleOwner, {
             it?.let {
                     initAnnouncementList(it)
@@ -50,14 +51,7 @@ class AnnouncementFragment : Fragment() {
                 list[position].body,
                 list[position].date
                 )
-            activity?.supportFragmentManager?.beginTransaction()?.apply {
-                replace(
-                    R.id.fragment_container,
-                    fragment, "AD"
-                )
-                    commit()
-            }
-                //Toast.makeText(activity,list[position].body, Toast.LENGTH_LONG).show()
+               setFragmentWithBackStack(fragment,FragmentType.InnerFragment)
             }
         if(list.count()>0){
             announcement_list_listView.visibility= View.VISIBLE

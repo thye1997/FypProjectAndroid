@@ -215,6 +215,24 @@ class UserRepository() {
         })
     }
 
+    fun GetDefaultProfileData (defProfile:DefaultProfileData, successResponse: (DefaultProfileData?) -> Unit, errorHandler:(Throwable?)->Unit){
+        val api = apiService.DefaultProfileData(defProfile)
+        api.enqueue(object : Callback<DefaultProfileData>{
+            override fun onResponse(call: Call<DefaultProfileData>, response: Response<DefaultProfileData>) {
+                when{
+                    response.isSuccessful ->{
+                        response.body()?.let {
+                            successResponse(it)
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call<DefaultProfileData>, t: Throwable) {
+                errorHandler(t)
+            }
+        })
+    }
+
 
 
 }

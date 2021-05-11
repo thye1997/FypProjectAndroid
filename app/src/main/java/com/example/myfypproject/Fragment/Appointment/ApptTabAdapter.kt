@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.myfypproject.Base.ApptType
 
 
 class ApptTabAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
@@ -15,9 +16,9 @@ class ApptTabAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : F
 
     override fun createFragment(position: Int): Fragment {
          when (position) {
-            1 -> return PastFragment()
-            2 -> return NoShowFragment()
+            1 -> return UpcomingFragment(ApptType.Past)
+            2 -> return UpcomingFragment(ApptType.Past)
         }
-         return UpcomingFragment()
+         return UpcomingFragment(ApptType.Upcoming)
     }
 }

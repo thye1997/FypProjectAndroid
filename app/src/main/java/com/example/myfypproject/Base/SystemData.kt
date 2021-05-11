@@ -25,6 +25,25 @@ enum class Relationship {
 }
 
 object FragmentName {
+    val Notification = "Notification"
     val NotificationPreferences ="Notification Preferences"
     val SwitchProfile = "Switch Profile"
+    val EditProfile = "Edit Profile"
+    val AppointmentDetail = "Appointment Detail"
+    val CheckIn = "Check In"
+}
+
+object FragmentType{
+    val InnerFragment ="IF"
+}
+
+object ArrayInit{
+    val gender= arrayOf("Male","Female")
+}
+object ApptType{
+    val Upcoming= 1
+    val Past = 2
+    val NoShow =3
+    val upcomingVal = arrayOf(0)
+    val pastVal = arrayOf(4,201)
 }

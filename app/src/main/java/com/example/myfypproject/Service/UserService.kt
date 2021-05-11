@@ -38,4 +38,8 @@ interface UserService {
 
         @POST("AccountApi/NotificationPrefsUpdate")
         fun UpdateNotificationPrefs(@Body updateNotificationPrefsRequest: UpdateNotificationPrefsRequest): Call<GeneralResponse>
+
+        @POST("AccountApi/GetDefaultProfileData")
+        fun DefaultProfileData(@Body defaultProfileData: DefaultProfileData): Call<DefaultProfileData>
+
 }

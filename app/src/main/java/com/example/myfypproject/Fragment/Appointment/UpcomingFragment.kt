@@ -1,40 +1,87 @@
 package com.example.myfypproject.Fragment.Appointment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import androidx.fragment.app.viewModels
+import com.example.myfypproject.Base.ApptType
+import com.example.myfypproject.Base.BaseFragment
+import com.example.myfypproject.Base.FragmentName
+import com.example.myfypproject.Base.FragmentType
+import com.example.myfypproject.Fragment.Notification.AnnouncementDetailFragment
+import com.example.myfypproject.Model.ApptListData
 import com.example.myfypproject.R
+import com.example.myfypproject.ViewModel.AppointmentViewModel
+import kotlinx.android.synthetic.main.fragment_announcement.*
 import kotlinx.android.synthetic.main.fragment_upcoming.*
+import kotlin.properties.Delegates
 
-class UpcomingFragment : Fragment() {
-    companion object {
-        fun newInstance(param1: String, param2: String) =
-            UpcomingFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
-    }
+class UpcomingFragment(private val apptType:Int) : BaseFragment() {
     private  lateinit var  adapter: ApptListAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    private val apptViewModel: AppointmentViewModel by viewModels()
+    override fun FragmentCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         return inflater.inflate(R.layout.fragment_upcoming, container, false)
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-       val arrayList = ArrayList<String>()
-        arrayList.add("a")
-        arrayList.add("b")
-        adapter = ApptListAdapter(requireActivity(),arrayList)
-        upcoming_list_listView.adapter = adapter
+    override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
+        initApiCall()
+        onScroll()
     }
+    override fun attachObserver() {
+        apptViewModel.isLoading.observe(this,{
+            uiVisibility(appt_list_layout,!it)
+            baseProgressBar(it)
+        })
+        apptViewModel.apptListDataResponse.observe(this,{
+            it?.let {
+                initAppointmentList(it)
+            }
+        })
+    }
+    private fun initAppointmentList(it:ArrayList<ApptListData>){
+        if(it.isEmpty()){
+            uiVisibility(upcoming_appt_empty_txt,true)
+        }
+        else{
+            adapter = ApptListAdapter(requireActivity(),it)
+            upcoming_list_listView.adapter = adapter
+            initItemSelectedListener(it)
 
+
+        }
+    }
+    private fun onScroll(){
+        appt_list_swipeRefresh.setOnRefreshListener {
+            initApiCall()
+            appt_list_swipeRefresh.isRefreshing = false
+        }
+    }
+    private fun initApiCall(){
+        var apptListData: ApptListData?
+        if(apptType == ApptType.Upcoming){
+            apptListData =ApptListData(accId,0,apptStatus = ApptType.upcomingVal)
+        }
+        else if(apptType ==ApptType.Past){
+            apptListData =ApptListData(accId,0,apptStatus = ApptType.pastVal)
+        }
+        else{
+            apptListData =ApptListData(accId,0,apptStatus = ApptType.pastVal)
+
+        }
+        apptViewModel.AppointmentListData(apptListData)
+    }
+    private fun initItemSelectedListener(it:ArrayList<ApptListData>){
+        upcoming_list_listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            clickViewModel.SetCurrentFragment(FragmentName.AppointmentDetail)
+            val fragment = AppointmentDetailFragment.newInstance(
+                it[position].apptId
+            )
+            setFragmentWithBackStack(fragment,FragmentType.InnerFragment)
+        }
+    }
 }

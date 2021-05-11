@@ -20,6 +20,7 @@ class UserViewModel : ViewModel() {
     var NotificationPrefsUpdateResponse = MutableLiveData<GeneralResponse>()
     var DeleteProfileResponse = MutableLiveData<GeneralResponse>()
     var SwitchDefaultProfileResponse = MutableLiveData<GeneralResponse>()
+    var ProfileDataResponse = MutableLiveData<DefaultProfileData>()
     var ProfileListResponse= MutableLiveData<ArrayList<ProfileListResponse>>()
     var relationshipVal = MutableLiveData<String>()
     var arrayValue = MutableLiveData<Array<String>>()
@@ -129,6 +130,16 @@ class UserViewModel : ViewModel() {
         isLoading.value = true
         userRepository.SwitchDefaultProfile(acc,{
             SwitchDefaultProfileResponse.value =it
+            isLoading.value = false
+        },{
+            isLoading.value = false
+            apiError.value = it
+        })
+    }
+    fun DefaultProfileData(defProfile:DefaultProfileData){
+        isLoading.value = true
+        userRepository.GetDefaultProfileData(defProfile,{
+            ProfileDataResponse.value =it
             isLoading.value = false
         },{
             isLoading.value = false

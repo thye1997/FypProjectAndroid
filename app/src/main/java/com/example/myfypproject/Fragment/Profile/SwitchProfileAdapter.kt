@@ -79,7 +79,6 @@ class SwitchProfileAdapter(private val context: Context, private val itemList: A
         SwitchProfileDefault(switchBtn,position,itemList[position].id)
         return view
     }
-
     private fun DeleteProfile(deleteBtn :AppCompatButton, position: Int){
         deleteBtn.setOnClickListener {
             val builder = AlertDialog.Builder(context)
