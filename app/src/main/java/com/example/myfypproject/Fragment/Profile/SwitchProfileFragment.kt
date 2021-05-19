@@ -27,6 +27,7 @@ class SwitchProfileFragment : Fragment(),SwitchProfileListener {
     val accId = SessionManager.GetaccId
     private val userViewModel: UserViewModel by viewModels()
     private  lateinit var  adapter: SwitchProfileAdapter
+    private var profileList: ArrayList<ProfileListResponse> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,6 +61,7 @@ class SwitchProfileFragment : Fragment(),SwitchProfileListener {
     {
         adapter = SwitchProfileAdapter(requireActivity(),it,this)
         switch_profile_listView.adapter = adapter
+        profileList = it
         adapter.sortByDefault()
         adapter.notifyDataSetChanged()
     }
@@ -74,12 +76,12 @@ class SwitchProfileFragment : Fragment(),SwitchProfileListener {
     }
     override fun onDeleteCallBack(Id: Int, position: Int) {
         userViewModel.DeleteProfile(Id)
-        userViewModel.DeleteProfileResponse.observe(viewLifecycleOwner,{
+        adapter.removeItem(position)
+        adapter.notifyDataSetChanged()
+        userViewModel.DeleteProfileResponse.observe(this,{
             it?.let {
                 if(it?.isSuccess){
                     Toast.makeText(context,it?.message,Toast.LENGTH_SHORT).show()
-                    adapter.removeItem(position)
-                    adapter.notifyDataSetChanged()
                 }
             }
         })

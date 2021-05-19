@@ -1,31 +1,27 @@
 package com.example.myfypproject.Fragment.Profile
 
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.children
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.*
+import androidx.fragment.app.activityViewModels
 import com.example.myfypproject.Base.ArrayInit
 import com.example.myfypproject.Base.BaseFragment
 import com.example.myfypproject.Dialog.GeneralDialog
 import com.example.myfypproject.Model.DefaultProfileData
 import com.example.myfypproject.R
-import com.example.myfypproject.ViewModel.ClickViewModel
 import com.example.myfypproject.ViewModel.UserViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
+import java.text.SimpleDateFormat
+import java.time.Month
+import java.time.Year
+import java.time.YearMonth
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -45,13 +41,13 @@ class EditProfileFragment : BaseFragment(){
     }
     override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
         baseProgressBar(true)
-        uiVisibility(edit_profile_constlayout,false)
+        uiVisibility(edit_profile_constlayout, false)
         buttonVisibility()
         val defProfile= DefaultProfileData(accId)
         userViewModel.DefaultProfileData(defProfile)
     }
     override fun attachObserver() {
-        userViewModel.ProfileDataResponse.observe(this,{
+        userViewModel.ProfileDataResponse.observe(this, {
             it?.let {
                 edit_profile_accEmail_edt.setText(it?.accountRegistered)
                 edit_profile_nric_edt.setText(it?.nric)
@@ -60,11 +56,11 @@ class EditProfileFragment : BaseFragment(){
                 edit_profile_gender_edt.setText(it?.gender)
                 edit_profile_dob_edt.setText(it?.dob)
                 baseProgressBar(false)
-                uiVisibility(edit_profile_constlayout,true)
+                uiVisibility(edit_profile_constlayout, true)
                 profileData = it
             }
         })
-        userViewModel.relationshipVal.observe(this,{
+        userViewModel.relationshipVal.observe(this, {
             it?.let {
                 edit_profile_gender_edt.setText(it)
             }
@@ -74,22 +70,22 @@ class EditProfileFragment : BaseFragment(){
         edit_profile_btn.setOnClickListener {
             uiVisibility(edit_profile_btn, false)
             uiVisibility(cancel_edit_profile_btn, true)
-            uiVisibility(save_edit_profile_btn,true)
+            uiVisibility(save_edit_profile_btn, true)
             //textChangeHandler(edit_profile_fullName_edt)
             onDialogTrigger()
             editTextHandler(true)
         }
         cancel_edit_profile_btn.setOnClickListener {
-            uiVisibility(edit_profile_btn,true)
-            uiVisibility(cancel_edit_profile_btn,false)
-            uiVisibility(save_edit_profile_btn,false)
+            uiVisibility(edit_profile_btn, true)
+            uiVisibility(cancel_edit_profile_btn, false)
+            uiVisibility(save_edit_profile_btn, false)
             editTextHandler(false)
         }
         save_edit_profile_btn.setOnClickListener {
-            uiVisibility(edit_profile_btn,true)
-            uiVisibility(cancel_edit_profile_btn,false)
-            uiVisibility(save_edit_profile_btn,false)
-            uiVisibility(edit_profile_constlayout,false)
+            uiVisibility(edit_profile_btn, true)
+            uiVisibility(cancel_edit_profile_btn, false)
+            uiVisibility(save_edit_profile_btn, false)
+            uiVisibility(edit_profile_constlayout, false)
             baseProgressBar(true)
             saveProfileData(true)
             editTextHandler(false)
@@ -109,7 +105,7 @@ class EditProfileFragment : BaseFragment(){
                       }
                        else{
                           textChangeHandler(edt)
-                          onCancelHandler(edt,q)
+                          onCancelHandler(edt, q)
                           TxtInput.editText?.setTextColor(Color.parseColor("#FF8E8E93"))
                       }
                        TxtInput.editText?.isEnabled = isEnabled
@@ -118,16 +114,18 @@ class EditProfileFragment : BaseFragment(){
             }
         }
     }
-    private fun saveProfileData(isSave:Boolean){
+    private fun saveProfileData(isSave: Boolean){
         val accReg = edit_profile_accEmail_edt.text.toString()
         val nric = edit_profile_nric_edt.text.toString()
         val fullName = edit_profile_fullName_edt.text.toString()
         val phoneNumber = edit_profile_phoneNumber_edt.text.toString()
         val gender = edit_profile_gender_edt.text.toString()
         val dob = edit_profile_dob_edt.text.toString()
-        updateProfileData = DefaultProfileData(accId,
+        updateProfileData = DefaultProfileData(
+            accId,
             accReg,
-            profileData.profileId, nric,fullName,phoneNumber,gender,dob)
+            profileData.profileId, nric, fullName, phoneNumber, gender, dob
+        )
         if(isSave){
             userViewModel.DefaultProfileData(updateProfileData)
             baseToastMessage("Profile updated successfully.")
@@ -135,7 +133,7 @@ class EditProfileFragment : BaseFragment(){
     }
     private fun textChangeHandler(edt: TextInputEditText){
         val txtInputLayout = edt.parent.parent as TextInputLayout
-        edt.doOnTextChanged{text, start, before, count ->
+        edt.doOnTextChanged{ text, start, before, count ->
             if(text?.count() ==0){
                txtInputLayout.helperText = "required"
                 save_edit_profile_btn.isEnabled=false
@@ -148,21 +146,20 @@ class EditProfileFragment : BaseFragment(){
             }
         }
     }
-    private fun onCancelHandler(edt:TextInputEditText, q: Int){
+    private fun onCancelHandler(edt: TextInputEditText, q: Int){
       val profileDataArray = ArrayList<String>()
         profileDataArray.add(profileData.fullName)
         profileDataArray.add(profileData.phoneNumber)
         profileDataArray.add(profileData.gender)
         profileDataArray.add(profileData.dob)
         for(i in 0 until profileDataArray.count()){
-            edt.setText(profileDataArray[q-2])
+            edt.setText(profileDataArray[q - 2])
         }
         edt.clearFocus()
     }
     private fun onDialogTrigger(){
-        val genderArray = arrayOf<String>("Male","Female")
         edit_profile_gender_edt.setOnClickListener {
-            childFragmentManager?.let { GeneralDialog.newInstance(ArrayInit.gender).show(it, "") }
+            childFragmentManager?.let { GeneralDialog(ArrayInit.gender,"Gender",null).show(it, "") }
         }
         edit_profile_dob_edt.setOnClickListener {
             val c = Calendar.getInstance()
@@ -180,5 +177,9 @@ class EditProfileFragment : BaseFragment(){
             dpd?.show()
         }
     }
-
+    /*private fun dateToCalendar(date: Date): Calendar {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        return calendar
+    }*/
 }

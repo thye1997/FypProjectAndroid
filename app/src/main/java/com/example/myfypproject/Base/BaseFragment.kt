@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.*
+import com.example.myfypproject.Fragment.Appointment.AppointmentDetailFragment
 import com.example.myfypproject.R
 import com.example.myfypproject.ViewModel.ClickViewModel
 import com.example.myfypproject.session.SessionManager
@@ -45,15 +44,52 @@ abstract class BaseFragment : Fragment() {
         else view.visibility = View.GONE
     }
 
-    protected fun allowCheckIn(checkIn:Boolean = false){
-        clickViewModel.SetIsCheckIn(checkIn)
+    protected fun setToolBarTitle(title:String){
+        clickViewModel.SetFragmentTitle(title)
     }
-    protected fun setFragmentWithBackStack(fragment: Fragment, type:String)=
-        activity?.supportFragmentManager?.beginTransaction()?.apply {
-            replace(
-                R.id.fragment_container,
-                fragment, type
-            ).addToBackStack(null)
-            commit()
+
+    protected fun allowCheckIn(checkIn:Boolean = false, apptId:Int =0){
+        clickViewModel.SetIsCheckIn(checkIn ,apptId)
+    }
+
+    protected inline fun <reified T> setFragmentWithBackStack( fragmentRemove: Fragment?=null, type:String, bundle: Bundle?) where T: BaseFragment=
+        run {
+            activity?.supportFragmentManager?.commit {
+                setReorderingAllowed(true)
+                replace<T>(R.id.fragment_container, tag= type,bundle)
+                    .addToBackStack(null)
+            }
         }
+    protected fun setFragmentWithBackStack(fragment: Fragment, fragmentRemove:Fragment?=null, type:String)=
+        if(fragmentRemove !=null){
+            activity?.supportFragmentManager?.beginTransaction()?.apply {
+                replace(
+                    R.id.fragment_container,
+                    fragment, type
+                ).addToBackStack(null)
+                    .remove(fragmentRemove)
+                commit()
+            }
+        }
+
+    else{
+            activity?.supportFragmentManager?.beginTransaction()?.apply {
+                replace(
+                    R.id.fragment_container,
+                    fragment, type
+                ).addToBackStack(null)
+                setReorderingAllowed(true)
+                commit()
+            }
+        }
+
+    protected fun setFragmentNoStack(fragment: Fragment, name:String)=
+            activity?.supportFragmentManager?.beginTransaction()?.apply {
+                replace(
+                    R.id.fragment_container,
+                    fragment, name
+                )
+                setReorderingAllowed(true)
+                commit()
+            }
 }

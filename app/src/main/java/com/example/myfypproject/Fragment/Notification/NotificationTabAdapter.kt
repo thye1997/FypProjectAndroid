@@ -16,7 +16,7 @@ class NotificationTabAdapter(fragmentManager: FragmentManager, lifecycle: Lifecy
 
     override fun createFragment(position: Int): Fragment {
         when (position) {
-            1 -> return AnnouncementFragment()
+            1 -> return ReminderFragment()
         }
         return AnnouncementFragment()
     }

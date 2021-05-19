@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="20dp"
         />
 
     <TextView
@@ -27,22 +29,16 @@
         android:text="No announcement found...."
         android:visibility="gone"
         />
-    <LinearLayout
-        android:id="@+id/add_profile_floatBtn_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="right"
-        android:background="@color/colorTextWhite"
-        >
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_profile_floatBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:gravity="right"
             app:srcCompat="@drawable/ic_baseline_add_24"
             android:layout_margin="@dimen/fab_margin"
             />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

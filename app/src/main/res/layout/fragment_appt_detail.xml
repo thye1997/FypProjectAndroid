@@ -9,20 +9,25 @@
     android:layout_margin="16dp"
     >
 
-
-        <!--attending username layout-->
+    <LinearLayout
+        android:id="@+id/first_row_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        >
         <LinearLayout
             android:id="@+id/apptDetail_user_name_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:orientation="vertical"
+            android:layout_weight="0.5">
             <TextView
                 android:id="@+id/apptDetail_username_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/appointment_details_text_label"
-                android:text="Name: "
+                android:text="Name"
                 android:layout_weight="0.05"
                 />
             <TextView
@@ -32,74 +37,245 @@
                 android:textSize="16sp"
                 tools:text="Low Chen Thye" />
         </LinearLayout>
-    <!--attending hp layout-->
+        <!--attending hp layout-->
+        <LinearLayout
+            android:id="@+id/apptDetail_phoneNum_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            >
+            <TextView
+                android:id="@+id/apptDetail_phoneNum_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/appointment_details_text_label"
+                android:text="@string/PhoneNumber_label"
+                android:layout_weight="0.05"
+                />
+            <TextView
+                android:id="@+id/apptDetail_phoneNum_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="018-9678543" />
+        </LinearLayout>
+
+    </LinearLayout>
+        <!--attending username layout-->
+
+  <LinearLayout
+      android:id="@+id/second_row_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:weightSum="1"
+      android:orientation="horizontal"
+      android:layout_below="@id/first_row_layout"
+      >
+      <LinearLayout
+          android:id="@+id/apptDetail_gender_layout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:layout_weight="0.5"
+         >
+          <TextView
+              android:id="@+id/apptDetail_gender_label"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              style="@style/appointment_details_text_label"
+              android:text="@string/Gender_label"
+              android:layout_weight="0.05"
+              />
+          <TextView
+              android:id="@+id/apptDetail_gender_value"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="16sp"
+              tools:text="Male" />
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/apptDetail_dob_layout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:layout_weight="0.5"
+          >
+          <TextView
+              android:id="@+id/apptDetail_dob_label"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              style="@style/appointment_details_text_label"
+              android:text="@string/DOB_label"
+              />
+          <TextView
+              android:id="@+id/apptDetail_dob_value"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="16sp"
+              tools:text="25-08-1997" />
+      </LinearLayout>
+
+  </LinearLayout>
     <LinearLayout
-        android:id="@+id/apptDetail_phoneNum_layout"
+        android:id="@+id/third_row_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:weightSum="1"
-        android:layout_below="@id/apptDetail_user_name_layout">
-        <TextView
-            android:id="@+id/apptDetail_phoneNum_label"
-            android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/second_row_layout"
+        >
+        <LinearLayout
+            android:id="@+id/apptDetail_date_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/appointment_details_text_label"
-            android:text="@string/PhoneNumber_label"
-            android:layout_weight="0.05"
-            />
-        <TextView
-            android:id="@+id/apptDetail_phoneNum_value"
-            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            >
+            <TextView
+                android:id="@+id/apptDetail_date_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/appointment_details_text_label"
+                android:text="Date"
+                android:layout_weight="0.05"
+                />
+            <TextView
+                android:id="@+id/apptDetail_date_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="25/08/2021" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/apptDetail_slot_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            tools:text="018-9678543" />
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            >
+            <TextView
+                android:id="@+id/apptDetail_slot_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/appointment_details_text_label"
+                android:text="Slot"
+                />
+            <TextView
+                android:id="@+id/apptDetail_slot_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="0900AM-0930AM" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/fourth_row_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:layout_below="@id/third_row_layout"
+        >
+        <LinearLayout
+            android:id="@+id/apptDetail_service_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            >
+            <TextView
+                android:id="@+id/apptDetail_service_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/appointment_details_text_label"
+                android:text="Service"
+                android:layout_weight="0.05"
+                />
+            <TextView
+                android:id="@+id/apptDetail_service_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="Others" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/apptDetail_status_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            >
+            <TextView
+                android:id="@+id/apptDetail_status_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/appointment_details_text_label"
+                android:text="Status"
+                />
+            <TextView
+                android:id="@+id/apptDetail_status_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="Confirmed" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/fifth_row_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:layout_below="@id/fourth_row_layout"
+        >
+        <LinearLayout
+            android:id="@+id/apptDetail_note_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:id="@+id/apptDetail_note_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/appointment_details_text_label"
+                android:text="Note"
+                android:layout_weight="0.05"
+                />
+            <TextView
+                android:id="@+id/apptDetail_note_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="Something" />
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/apptDetail_gender_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1"
-        android:layout_below="@id/apptDetail_phoneNum_layout">
-        <TextView
-            android:id="@+id/apptDetail_gender_label"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/appt_detail_reschedule_btn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/appointment_details_text_label"
-            android:text="@string/Gender_label"
-            android:layout_weight="0.05"
+            android:background="@drawable/curve_button"
+            android:textColor="@color/colorTextWhite"
+            android:text="Reschedule"
+            android:layout_marginBottom="10dp"
+            android:layout_above="@id/appt_detail_cancel_btn"
             />
-        <TextView
-            android:id="@+id/apptDetail_gender_value"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/appt_detail_cancel_btn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            tools:text="Male" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/apptDetail_dob_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1"
-        android:layout_below="@id/apptDetail_gender_layout">
-        <TextView
-            android:id="@+id/apptDetail_dob_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/appointment_details_text_label"
-            android:text="@string/DOB_label"
-            android:layout_weight="0.05"
+            android:background="@drawable/curve_button"
+            android:textColor="@color/colorTextWhite"
+            android:text="Cancel"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentBottom="true"
             />
-        <TextView
-            android:id="@+id/apptDetail_dob_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            tools:text="25-08-1997" />
-    </LinearLayout>
 
 </RelativeLayout>

@@ -5,21 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.example.myfypproject.Base.BaseFragment
 import com.example.myfypproject.Base.FragmentType
-import com.example.myfypproject.Fragment.Appointment.ApptListAdapter
-import com.example.myfypproject.Model.Account
 import com.example.myfypproject.Model.NotificationListResponse
 import com.example.myfypproject.R
-import com.example.myfypproject.ViewModel.AppointmentViewModel
 import com.example.myfypproject.ViewModel.NotificationViewModel
 import kotlinx.android.synthetic.main.fragment_announcement.*
-import kotlinx.android.synthetic.main.fragment_upcoming.*
-
 class AnnouncementFragment : BaseFragment() {
     private val notificationViewModel: NotificationViewModel by activityViewModels()
     private  lateinit var  adapter: NotificationListAdapter
@@ -46,12 +39,12 @@ class AnnouncementFragment : BaseFragment() {
 
     private fun initAnnouncementList(list: ArrayList<NotificationListResponse>){
         announcement_list_listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val fragment = AnnouncementDetailFragment.newInstance(
-                list[position].title,
-                list[position].body,
-                list[position].date
-                )
-               setFragmentWithBackStack(fragment,FragmentType.InnerFragment)
+            val bundle = bundleOf(
+                "title" to list[position].title,
+                "body" to list[position].body,
+                "date" to list[position].date
+            )
+            setFragmentWithBackStack<AnnouncementDetailFragment>(type =FragmentType.InnerFragment,fragmentRemove = null, bundle = bundle)
             }
         if(list.count()>0){
             announcement_list_listView.visibility= View.VISIBLE

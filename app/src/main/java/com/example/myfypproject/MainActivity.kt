@@ -3,6 +3,9 @@ package com.example.myfypproject
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import com.example.myfypproject.Base.BaseActivity
@@ -21,6 +24,7 @@ import com.example.myfypproject.ViewModel.UserViewModel
 import com.example.myfypproject.session.SessionManager
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.properties.Delegates
 
 class MainActivity : BaseActivity() {
     companion object {
@@ -38,6 +42,8 @@ class MainActivity : BaseActivity() {
      val apptViewModel: AppointmentViewModel by viewModels()
     val userViewModel: UserViewModel by viewModels()
     val clickViewModel: ClickViewModel by viewModels()
+    private lateinit var currentFragment:String
+    private var apptId by Delegates.notNull<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -63,6 +69,16 @@ class MainActivity : BaseActivity() {
         supportFragmentManager.beginTransaction().apply {
             toolBarTitle(pageTitle)
             replace(R.id.fragment_container,fragment,pageTitle)
+            setReorderingAllowed(true)
+            commit()
+        }
+    private fun setCurrentFragmentToStack(fragment: Fragment, type:String, bundle: Bundle?=null)=
+        supportFragmentManager.beginTransaction().apply {
+            replace(
+                R.id.fragment_container,
+                fragment, FragmentType.InnerFragment
+            ).addToBackStack(null)
+            setReorderingAllowed(true)
             commit()
         }
     private fun attachObserver(){
@@ -86,6 +102,17 @@ class MainActivity : BaseActivity() {
         clickViewModel.isCheckIn.observe(this,{
                 inflateQRIcon(it)
         })
+        clickViewModel.fragmentTitle.observe(this,{
+            toolBarTitle(it)
+        })
+        clickViewModel.backPress.observe(this,{
+            if(it){
+                checkFragmentState()
+            }
+        })
+        clickViewModel.apptIdVal.observe(this,{
+            apptId = it
+        })
     }
     private fun onFragmentChange(fragmentName : String){
         toolBarTitle(fragmentName)
@@ -93,6 +120,8 @@ class MainActivity : BaseActivity() {
 
     override fun onAttachFragment(fragment: Fragment) {
         super.onAttachFragment(fragment)
+        currentFragment = fragment.tag.toString()
+        //baseToastMessage(currentFragment)
     }
     override fun onBackPressed() {
         checkFragmentState()
@@ -108,25 +137,38 @@ class MainActivity : BaseActivity() {
     }
     private fun inflateQRIcon(it: Boolean){
         if(it){
-            baseToolbar.inflateMenu(R.menu.qr_menu)
+            if(baseToolbar.findViewById<View>(R.id.qr_code_btn)==null){
+                baseToolbar.inflateMenu(R.menu.qr_menu)
+            }
         }
         else{
             baseToolbar.menu.clear()
         }
         base_toolbar.setOnMenuItemClickListener {
             if(it.itemId ==R.id.qr_code_btn){
-                val qrCodeFragment = QRCodeFragment()
-                setCurrentFragment(FragmentName.CheckIn,qrCodeFragment)
+                val qrCodeFragment = QRCodeFragment.newInstance(apptId)
+                toolBarTitle(FragmentName.CheckIn)
+                setCurrentFragmentToStack(qrCodeFragment,FragmentType.InnerFragment)
             }
             true
         }
     }
     private fun checkFragmentState(){
+
         val fragment = supportFragmentManager
         val backStackFragment = fragment.findFragmentByTag(FragmentType.InnerFragment)
         val totalFrag = fragment.backStackEntryCount
+        for(i in 0 until totalFrag){
+            //fragment?.getBackStackEntryAt(i)?.name
+            fragment.getBackStackEntryAt(i).name.let { it->
+                if (it != null) {
+                    Log.d("Fragment list", it)
+                }
+            }
+        }
         if(fragment !=null){
             if(backStackFragment !=null && backStackFragment?.isAdded!! && backStackFragment.isVisible){
+
                 fragment.popBackStack()
             }
             else{
@@ -136,15 +178,5 @@ class MainActivity : BaseActivity() {
         else{
             shuntDownApp()
         }
-
-        /*for(i in 0 until totalFrag){
-            if(fragment.getBackStackEntryAt(i).name.toString() == FragmentType.InnerFragment){
-                fragment.popBackStack()
-            }
-            else{
-                shuntDownApp()
-            }
-            //baseToastMessage(fragment.getBackStackEntryAt(i).name.toString())
-        }*/
     }
 }

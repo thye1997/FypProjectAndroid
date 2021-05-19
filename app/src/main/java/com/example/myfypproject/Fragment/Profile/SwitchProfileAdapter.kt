@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.myfypproject.Listener.SwitchProfileListener
 import com.example.myfypproject.Model.NotificationListResponse
@@ -75,12 +76,14 @@ class SwitchProfileAdapter(private val context: Context, private val itemList: A
             deleteBtn.visibility = View.VISIBLE
             defaultProfile.visibility = View.GONE
         }
-        DeleteProfile(deleteBtn, position)
+        deleteBtn.setOnClickListener {
+            DeleteProfile(deleteBtn, position)
+        }
         SwitchProfileDefault(switchBtn,position,itemList[position].id)
         return view
     }
     private fun DeleteProfile(deleteBtn :AppCompatButton, position: Int){
-        deleteBtn.setOnClickListener {
+        Toast.makeText(context, "index =>$position arraylistsize=> ${itemList.count()}", Toast.LENGTH_SHORT).show()
             val builder = AlertDialog.Builder(context)
             builder.setMessage("Delete this profile?")
             //performing positive action
@@ -95,7 +98,6 @@ class SwitchProfileAdapter(private val context: Context, private val itemList: A
             // Set other dialog properties
             alertDialog.setCancelable(false)
             alertDialog.show()
-        }
     }
     fun SwitchProfileDefault(switchBtn:AppCompatButton, position: Int,idSelected:Int){
         switchBtn.setOnClickListener {

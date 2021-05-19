@@ -4,20 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.example.myfypproject.Base.ApptType
-import com.example.myfypproject.Base.BaseFragment
+import com.example.myfypproject.Base.*
 import com.example.myfypproject.Fragment.Notification.AnnouncementDetailFragment
 import com.example.myfypproject.Model.ApptListData
+import com.example.myfypproject.Model.RescheduleAppointment
 import com.example.myfypproject.R
 import com.example.myfypproject.ViewModel.AppointmentViewModel
 import com.example.myfypproject.ViewModel.ClickViewModel
 import kotlinx.android.synthetic.main.fragment_appt_detail.*
 import kotlinx.android.synthetic.main.fragment_upcoming.*
+import kotlin.properties.Delegates
 
 
-class AppointmentDetailFragment: BaseFragment() {
+class AppointmentDetailFragment: BaseFragment(),View.OnClickListener {
+    private var apptIds by Delegates.notNull<Int>()
+   private  lateinit var apptListData: ApptListData
     companion object {
         fun newInstance(apptId: Int): AppointmentDetailFragment {
             val fragment = AppointmentDetailFragment()
@@ -37,10 +41,9 @@ class AppointmentDetailFragment: BaseFragment() {
     }
 
     override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
-        val args = arguments
-        val apptId = requireArguments().getInt("apptId")
-        var apptListData: ApptListData?
-            apptListData =ApptListData(accId,apptId,apptStatus = ApptType.upcomingVal)
+        apptIds = requireArguments().getInt("apptId")
+        //var apptListData: ApptListData?
+            apptListData =ApptListData(accId,apptIds,apptStatus = ApptType.upcomingVal)
         apptViewModel.AppointmentDetailData(apptListData)
     }
 
@@ -52,8 +55,12 @@ class AppointmentDetailFragment: BaseFragment() {
         apptViewModel.apptDetailDataResponse.observe(this,{
             it?.let {
                 initAppointmentDetails(it)
-                allowCheckIn(it[0]?.isCheckIn)
+                allowCheckIn(it[0]?.isCheckIn, apptIds)
             }
+        })
+        apptViewModel.rescheduleAppointmentResponse.observe(this,{
+            baseToastMessage(it.message)
+            apptViewModel.AppointmentDetailData(apptListData)
         })
     }
 
@@ -62,6 +69,44 @@ class AppointmentDetailFragment: BaseFragment() {
         apptDetail_phoneNum_value.text = it[0]?.phoneNumber
         apptDetail_gender_value.text = it[0]?.gender
         apptDetail_dob_value.text = it[0]?.dob
+        apptDetail_date_value.text = it[0]?.date
+        apptDetail_slot_value.text = it[0]?.slot
+        apptDetail_service_value.text = it[0]?.service
+        apptDetail_note_value.text = it[0]?.note
+        apptDetail_status_value.text = it[0]?.apptStatusString
+        appt_detail_cancel_btn.setOnClickListener(this)
+        appt_detail_reschedule_btn.setOnClickListener(this)
+
+        buttonVisibility(it[0].isAction)
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+           R.id.appt_detail_cancel_btn-> changeApptState(ApptAction.Cancel)
+           R.id.appt_detail_reschedule_btn -> changeApptState(ApptAction.Reschedule)
+        }
+    }
+
+    private fun buttonVisibility(isVisible:Boolean){
+        if(!isVisible){
+            appt_detail_reschedule_btn.visibility = View.GONE
+            appt_detail_cancel_btn.visibility = View.GONE
+        }
+        else{
+            appt_detail_reschedule_btn.visibility = View.VISIBLE
+            appt_detail_cancel_btn.visibility = View.VISIBLE
+        }
+    }
+
+    private fun changeApptState(state:Int){
+       if(state == ApptAction.Reschedule){
+           val bundle = bundleOf("apptId" to apptIds)
+           setFragmentWithBackStack<RescheduleFragment>(null,FragmentType.InnerFragment, bundle)
+       }
+        else{
+           val rescheduleAppt = RescheduleAppointment( ApptActionType.cancel,apptIds,"","")
+            apptViewModel.RescheduleAppointment(rescheduleAppt)
+       }
     }
 
 }

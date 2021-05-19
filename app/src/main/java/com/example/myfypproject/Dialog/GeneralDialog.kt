@@ -15,7 +15,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.ActivityNavigatorExtras
 import com.example.myfypproject.Activity.AddProfileActivity
+import com.example.myfypproject.Base.DialogTitle
 import com.example.myfypproject.Base.Relationship
+import com.example.myfypproject.Listener.DialogItemListener
 import com.example.myfypproject.R
 import com.example.myfypproject.ViewModel.AppointmentViewModel
 import com.example.myfypproject.ViewModel.UserViewModel
@@ -23,39 +25,47 @@ import com.example.myfypproject.session.ApplicationContext
 import java.util.*
 import kotlin.collections.ArrayList
 
-class GeneralDialog : DialogFragment() {
+class GeneralDialog(private val array: Array<String>, private val title: String, private val dialogItemListener: DialogItemListener?) : DialogFragment() {
     private val userViewModel: UserViewModel by activityViewModels()
-    companion object {
-        fun newInstance(array: Array<String>): GeneralDialog {
+    /*companion object {
+        fun newInstance(array: Array<String>, title:String): GeneralDialog {
             val fragment = GeneralDialog()
             val args = Bundle()
              args.putStringArray("arrayss", array)
+            args.putString("title", title)
             fragment.arguments = args
             return fragment
         }
-    }
+    }*/
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val args = arguments
-        val arraylists = requireArguments().getStringArray("arrayss") as Array<String>
-
-        /*Toast.makeText(
-            ApplicationContext(), arraylists.toString(),
-            Toast.LENGTH_SHORT
-        ).show()*/
         return activity?.let {
             // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(it)
-            val array = resources.getStringArray(R.array.relationship_array)
-            builder.setTitle("Relationship")
-
-            builder.setSingleChoiceItems(arraylists,-1) { _, which ->
-                val value = arraylists[which]
+            builder.setTitle(title)
+            builder.setSingleChoiceItems(array,-1) { _, which ->
+                val value = array[which]
                 dismiss()
-                userViewModel.SetRelationshipValue(value)
+                when(title){
+                    DialogTitle.TimeSlot-> onTimeSlotSelected(which)
+                    DialogTitle.Slots->onSelected(value)
+                    DialogTitle.Service->onGeneralSelected(which,DialogTitle.Service)
+                    DialogTitle.Gender->onSelected(value)
+                    else->userViewModel.SetClickedValue(value)
+                }
             }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun onTimeSlotSelected(position:Int){
+            dialogItemListener?.onSelectedCallBack(position)
+    }
+    private fun onSelected(value:String){
+        dialogItemListener?.onSelectedCallBack(value)
+    }
+    private fun onGeneralSelected(position: Int,type:String){
+        dialogItemListener?.onGeneralSelectedCallBack(position,type)
     }
 }

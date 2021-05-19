@@ -2,9 +2,8 @@ package com.example.myfypproject.Repository
 
 import android.util.Log
 import com.example.myfypproject.Base.BaseUrl
-import com.example.myfypproject.Model.Account
 import com.example.myfypproject.Model.NotificationListResponse
-import com.example.myfypproject.Service.AppointmentService
+import com.example.myfypproject.Model.ReminderListReponse
 import com.example.myfypproject.Service.NotificationService
 import com.google.gson.GsonBuilder
 import retrofit2.Call
@@ -34,6 +33,20 @@ class NotificationRepository() {
                 }
             }
             override fun onFailure(call: Call<ArrayList<NotificationListResponse>>, t: Throwable) {
+                Log.d("failed called", t.message.toString())
+            }
+        })
+    }
+
+    fun ReminderList(accId:Int, successResponse:(ArrayList<ReminderListReponse>?)->Unit, errorHandler:(Throwable?)->Unit){
+        val api = apiService.GetReminderList(accId)
+        api.enqueue(object : Callback<ArrayList<ReminderListReponse>> {
+            override fun onResponse(call: Call<ArrayList<ReminderListReponse>>, response: Response<ArrayList<ReminderListReponse>>) {
+                response.body()?.let{
+                    successResponse(it)
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<ReminderListReponse>>, t: Throwable) {
                 Log.d("failed called", t.message.toString())
             }
         })

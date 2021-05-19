@@ -36,6 +36,11 @@
 
 
     <string name="test_long_string">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electron</string>
+    <string-array name="slots_array">
+        <item>Slot 1</item>
+        <item>Slot 2</item>
+        <item>Slot 3</item>
+    </string-array>
     <string-array name="relationship_array">
         <item>Self</item>
         <item>Mother</item>

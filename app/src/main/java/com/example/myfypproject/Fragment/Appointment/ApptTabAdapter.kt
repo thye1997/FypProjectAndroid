@@ -17,7 +17,7 @@ class ApptTabAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : F
     override fun createFragment(position: Int): Fragment {
          when (position) {
             1 -> return UpcomingFragment(ApptType.Past)
-            2 -> return UpcomingFragment(ApptType.Past)
+            2 -> return UpcomingFragment(ApptType.NoShow)
         }
          return UpcomingFragment(ApptType.Upcoming)
     }

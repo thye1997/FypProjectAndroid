@@ -46,6 +46,15 @@ val phoneNumber:String="",
 val gender:String="",
 val dob:String="",
 )
+data class AddNewProfileRequest(
+    val accId: Int,
+    val relationship: String,
+    val nric: String,
+    var fullName:String,
+    val phoneNumber:String,
+    val gender:String,
+    val dob:String,
+)
 data class DefaultProfileData(
     val accId:Int,
     val accountRegistered:String="",

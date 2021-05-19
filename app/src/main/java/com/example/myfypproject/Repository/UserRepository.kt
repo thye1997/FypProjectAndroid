@@ -77,6 +77,24 @@ class UserRepository() {
             }
         })
     }
+    fun AddNewProfile (addNewProfile: AddNewProfileRequest, successResponse: (GeneralResponse?) -> Unit, errorHandler:(Throwable?)->Unit){
+        val api = apiService.AddNewProfile(addNewProfile)
+        api.enqueue(object : Callback<GeneralResponse>{
+            override fun onResponse(call: Call<GeneralResponse>, response: Response<GeneralResponse>) {
+                when{
+                    response.isSuccessful ->{
+                        response.body()?.let {
+                            successResponse(it)
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call<GeneralResponse>, t: Throwable) {
+                errorHandler(t)
+            }
+        })
+    }
+
     fun SearchExistProfile (NRIC: String, successResponse: (ProfileSearchResponse?) -> Unit, errorHandler:(Throwable?)->Unit){
         val api = apiService.SearchProfile(NRIC)
         api.enqueue(object : Callback<ProfileSearchResponse>{

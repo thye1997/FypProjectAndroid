@@ -21,6 +21,9 @@ interface UserService {
         @POST("AccountApi/AddProfile")
         fun AddProfile(@Body addProfile: AddProfileRequest): Call<GeneralResponse>
 
+        @POST("AccountApi/AddNewProfile")
+        fun AddNewProfile(@Body addNewProfile: AddNewProfileRequest): Call<GeneralResponse>
+
         @POST("AccountApi/ProfileList")
         fun GetProfileList(@Body accId: Int): Call<ArrayList<ProfileListResponse>>
 

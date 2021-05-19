@@ -51,8 +51,6 @@ class UpcomingFragment(private val apptType:Int) : BaseFragment() {
             adapter = ApptListAdapter(requireActivity(),it)
             upcoming_list_listView.adapter = adapter
             initItemSelectedListener(it)
-
-
         }
     }
     private fun onScroll(){
@@ -70,7 +68,7 @@ class UpcomingFragment(private val apptType:Int) : BaseFragment() {
             apptListData =ApptListData(accId,0,apptStatus = ApptType.pastVal)
         }
         else{
-            apptListData =ApptListData(accId,0,apptStatus = ApptType.pastVal)
+            apptListData =ApptListData(accId,0,apptStatus = ApptType.noShowVal)
 
         }
         apptViewModel.AppointmentListData(apptListData)
@@ -81,7 +79,7 @@ class UpcomingFragment(private val apptType:Int) : BaseFragment() {
             val fragment = AppointmentDetailFragment.newInstance(
                 it[position].apptId
             )
-            setFragmentWithBackStack(fragment,FragmentType.InnerFragment)
+            setFragmentWithBackStack(fragment,type = FragmentType.InnerFragment)
         }
     }
 }

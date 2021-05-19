@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.example.myfypproject.R
 import com.example.myfypproject.session.ApplicationContext
+import com.example.myfypproject.session.SessionManager
 import kotlinx.android.synthetic.main.activity_login.*
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -24,7 +25,6 @@ abstract class BaseActivity : AppCompatActivity() {
     abstract var titleOfView : String
     lateinit var progressBar: ProgressBar
     private var layoutResID: Int = 0
-
     override fun setContentView(layoutResID: Int) {
         this.layoutResID = layoutResID
         val inflater = LayoutInflater.from(this)

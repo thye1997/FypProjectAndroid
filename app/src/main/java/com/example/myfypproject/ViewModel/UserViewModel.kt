@@ -21,8 +21,10 @@ class UserViewModel : ViewModel() {
     var DeleteProfileResponse = MutableLiveData<GeneralResponse>()
     var SwitchDefaultProfileResponse = MutableLiveData<GeneralResponse>()
     var ProfileDataResponse = MutableLiveData<DefaultProfileData>()
+    var addNewProfileResponse = MutableLiveData<GeneralResponse>()
     var ProfileListResponse= MutableLiveData<ArrayList<ProfileListResponse>>()
     var relationshipVal = MutableLiveData<String>()
+    var timeSlotSelect = MutableLiveData<Int>()
     var arrayValue = MutableLiveData<Array<String>>()
 
     fun LoginUser(loginRequest: LoginRequest) {
@@ -78,6 +80,18 @@ class UserViewModel : ViewModel() {
         userRepository.AddProfile(addProfile,
             {
                 GeneralResponse.value = it
+                isLoading.value = false
+            }, {
+                isLoading.value = false
+                apiError.value = it
+            })
+    }
+
+    fun AddNewProfile(addNewProfile: AddNewProfileRequest){
+        isLoading.value = true
+        userRepository.AddNewProfile(addNewProfile,
+            {
+                addNewProfileResponse.value = it
                 isLoading.value = false
             }, {
                 isLoading.value = false
@@ -158,9 +172,13 @@ class UserViewModel : ViewModel() {
         })
     }
 
-    fun SetRelationshipValue(value:String){
+    fun SetClickedValue(value:String){
         relationshipVal.value = value
     }
+    fun SetTimeSlotValue(value:Int){
+        timeSlotSelect.value = value
+    }
+
     fun SetArrayValue(array:Array<String>){
         arrayValue.value = array
     }

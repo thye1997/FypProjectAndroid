@@ -6,3 +6,7 @@ data class NotificationListResponse(
     val body: String,
     val date: String
 )
+
+data class ReminderListReponse(
+    val content:String
+)

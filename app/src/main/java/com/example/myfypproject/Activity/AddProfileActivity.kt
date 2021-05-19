@@ -65,7 +65,7 @@ class AddProfileActivity : BaseActivity() {
             for(n in Relationship.values()){
                 arrayList.add(n.name)
             }
-            GeneralDialog.newInstance(arrayList.toTypedArray()).show(supportFragmentManager,"RelationShipDialog")
+            GeneralDialog(arrayList.toTypedArray(), "Relationship",null).show(supportFragmentManager,"RelationShipDialog")
         }
         base_toolbar.setOnMenuItemClickListener {
             if(it.itemId ==R.id.reset_txt_btn){

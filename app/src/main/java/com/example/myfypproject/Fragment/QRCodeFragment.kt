@@ -8,14 +8,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.viewModels
 import com.example.myfypproject.Base.BaseFragment
+import com.example.myfypproject.Fragment.Appointment.AppointmentDetailFragment
+import com.example.myfypproject.Model.CheckInAppointment
 import com.example.myfypproject.R
+import com.example.myfypproject.ViewModel.AppointmentViewModel
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 
 class QRCodeFragment:BaseFragment(),ZXingScannerView.ResultHandler{
+    companion object {
+        fun newInstance(apptId: Int): QRCodeFragment {
+            val fragment = QRCodeFragment()
+            val args = Bundle()
+            args.putInt("apptId",apptId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
     private  lateinit var zXingScannerView: ZXingScannerView
+    val apptViewModel : AppointmentViewModel by viewModels()
     override fun FragmentCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,6 +50,18 @@ class QRCodeFragment:BaseFragment(),ZXingScannerView.ResultHandler{
         }
     }
     override fun attachObserver() {
+        apptViewModel.checkInAppointmentResponse.observe(this,{
+            it?.let {
+                if(it.isSuccess){
+                    baseToastMessage(it.message)
+                    clickViewModel.triggerBackPress()
+                }
+                else{
+                    baseToastMessage(it.message)
+                    initScanner()
+                }
+            }
+        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -51,8 +77,11 @@ class QRCodeFragment:BaseFragment(),ZXingScannerView.ResultHandler{
     }
 
     private fun handleScannedResult(result: Result){
-        val scanResult = result
-        if(!scanResult.toString().isNullOrEmpty()){
+        val apptId = requireArguments().getInt("apptId")
+        val scanResult = result.toString()
+        if(!scanResult.isNullOrEmpty()){
+            val checkInModel = CheckInAppointment(apptId,scanResult)
+            apptViewModel.CheckInAppointmentQR(checkInModel)
         }
     }
     private fun permissionCheck(requestCode: Int, grantResults: IntArray):Boolean{

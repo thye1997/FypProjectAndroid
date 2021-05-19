@@ -2,9 +2,7 @@ package com.example.myfypproject.session
 
 import android.content.Intent
 import android.content.SharedPreferences
-import android.text.BoringLayout
 import com.example.myfypproject.Activity.LoginActivity
-import com.example.myfypproject.Model.Account
 
 object SessionManager {
 // Constructor

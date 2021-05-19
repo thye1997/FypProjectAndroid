@@ -64,21 +64,21 @@ class ProfileFragment : BaseFragment() {
         notification_pref_layout.setOnClickListener {
             val notificationPrefFragment = NotificationPrefFragment()
             clickViewModel.SetCurrentFragment(FragmentName.NotificationPreferences)
-            setFragmentWithBackStack(notificationPrefFragment,FragmentType.InnerFragment)
+            setFragmentWithBackStack(notificationPrefFragment,type =FragmentType.InnerFragment)
         }
     }
     private fun switchProfileClickListener(){
         switch_profile_layout.setOnClickListener {
             val switchProfileFragment = SwitchProfileFragment()
             clickViewModel.SetCurrentFragment(FragmentName.SwitchProfile)
-            setFragmentWithBackStack(switchProfileFragment,FragmentType.InnerFragment)
+            setFragmentWithBackStack(switchProfileFragment,type =FragmentType.InnerFragment)
         }
     }
     private fun editProfileClickListener(){
         edit_profile_layout.setOnClickListener {
             val editProfileFragment = EditProfileFragment()
             clickViewModel.SetCurrentFragment(FragmentName.EditProfile)
-            setFragmentWithBackStack(editProfileFragment,FragmentType.InnerFragment)
+            setFragmentWithBackStack(editProfileFragment,type =FragmentType.InnerFragment)
         }
     }
 }

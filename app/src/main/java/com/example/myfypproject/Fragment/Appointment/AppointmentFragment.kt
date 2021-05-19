@@ -9,24 +9,33 @@ import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.example.myfypproject.Base.BaseFragment
+import com.example.myfypproject.Base.FragmentName
 import com.example.myfypproject.R
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_first.*
 import kotlinx.android.synthetic.main.fragment_second.*
 
-class AppointmentFragment : Fragment() {
+class AppointmentFragment : BaseFragment() {
     private lateinit var fragmentAdapter: ApptTabAdapter
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun FragmentCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_second, container, false)
     }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initScreen()
 
+    override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
+        initScreen()
+    }
+
+    override fun attachObserver() {
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setToolBarTitle(FragmentName.Appointment)
     }
 
     private fun initScreen(){
