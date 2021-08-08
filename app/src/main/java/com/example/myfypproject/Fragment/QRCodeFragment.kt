@@ -16,6 +16,7 @@ import com.example.myfypproject.R
 import com.example.myfypproject.ViewModel.AppointmentViewModel
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
+import kotlin.properties.Delegates
 
 
 class QRCodeFragment:BaseFragment(),ZXingScannerView.ResultHandler{
@@ -28,6 +29,7 @@ class QRCodeFragment:BaseFragment(),ZXingScannerView.ResultHandler{
             return fragment
         }
     }
+    private var apptId by Delegates.notNull<Int>()
     private  lateinit var zXingScannerView: ZXingScannerView
     val apptViewModel : AppointmentViewModel by viewModels()
     override fun FragmentCreateView(
@@ -48,6 +50,8 @@ class QRCodeFragment:BaseFragment(),ZXingScannerView.ResultHandler{
         else if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M){
 
         }
+        apptId = requireArguments().getInt("apptId")
+        allowCheckIn(false,apptId)
     }
     override fun attachObserver() {
         apptViewModel.checkInAppointmentResponse.observe(this,{
@@ -77,7 +81,6 @@ class QRCodeFragment:BaseFragment(),ZXingScannerView.ResultHandler{
     }
 
     private fun handleScannedResult(result: Result){
-        val apptId = requireArguments().getInt("apptId")
         val scanResult = result.toString()
         if(!scanResult.isNullOrEmpty()){
             val checkInModel = CheckInAppointment(apptId,scanResult)

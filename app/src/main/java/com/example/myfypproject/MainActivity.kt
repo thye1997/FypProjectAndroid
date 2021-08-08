@@ -3,20 +3,34 @@ package com.example.myfypproject
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils.replace
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.example.myfypproject.Base.BaseActivity
+import com.example.myfypproject.Base.BaseFragment
 import com.example.myfypproject.Base.FragmentName
 import com.example.myfypproject.Base.FragmentType
 import com.example.myfypproject.FCM.FCMListener
 import com.example.myfypproject.FCM.MyFirebaseService
 import com.example.myfypproject.Fragment.*
+import com.example.myfypproject.Fragment.Appointment.AddAppointmentFragment
+import com.example.myfypproject.Fragment.Appointment.AppointmentDetailFragment
 import com.example.myfypproject.Fragment.Appointment.AppointmentFragment
+import com.example.myfypproject.Fragment.Appointment.RescheduleFragment
+import com.example.myfypproject.Fragment.Notification.AnnouncementDetailFragment
+import com.example.myfypproject.Fragment.Notification.AnnouncementFragment
 import com.example.myfypproject.Fragment.Notification.NotificationFragment
+import com.example.myfypproject.Fragment.Profile.EditProfileFragment
+import com.example.myfypproject.Fragment.Profile.NotificationPrefFragment
 import com.example.myfypproject.Fragment.Profile.ProfileFragment
+import com.example.myfypproject.Fragment.Profile.SwitchProfileFragment
+import com.example.myfypproject.Model.SwitchProfileRequest
 import com.example.myfypproject.Model.UpdateFirebaseTokenRequest
 import com.example.myfypproject.ViewModel.AppointmentViewModel
 import com.example.myfypproject.ViewModel.ClickViewModel
@@ -44,6 +58,7 @@ class MainActivity : BaseActivity() {
     val clickViewModel: ClickViewModel by viewModels()
     private lateinit var currentFragment:String
     private var apptId by Delegates.notNull<Int>()
+    private lateinit var currentFrag: Fragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -57,29 +72,31 @@ class MainActivity : BaseActivity() {
         UpdateFCMToken()
         btmNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_home -> setCurrentFragment("Home",homeFragment)
-                R.id.navigation_appt -> setCurrentFragment("Appointment",appointmentFragment)
-                R.id.navigation_notification -> setCurrentFragment("Notification",notificationFragment)
-                R.id.navigation_profile -> setCurrentFragment("Profile", profileFragment)
+                R.id.navigation_home -> setFragment<HomeFragment>(FragmentName.Home,homeFragment,null)
+                R.id.navigation_appt -> setFragment<AppointmentFragment>(FragmentName.Appointment,appointmentFragment,null)
+                R.id.navigation_notification -> setFragment<NotificationFragment>(FragmentName.Notification,notificationFragment,null)
+                R.id.navigation_profile -> setFragment<ProfileFragment>(FragmentName.Profile, profileFragment, null)
             }
             true
         }
     }
     private fun setCurrentFragment(pageTitle:String,fragment: Fragment)=
         supportFragmentManager.beginTransaction().apply {
+            currentFrag = fragment
             toolBarTitle(pageTitle)
             replace(R.id.fragment_container,fragment,pageTitle)
             setReorderingAllowed(true)
             commit()
         }
-    private fun setCurrentFragmentToStack(fragment: Fragment, type:String, bundle: Bundle?=null)=
-        supportFragmentManager.beginTransaction().apply {
-            replace(
-                R.id.fragment_container,
-                fragment, FragmentType.InnerFragment
-            ).addToBackStack(null)
-            setReorderingAllowed(true)
-            commit()
+    @Suppress("NON_PUBLIC_CALL_FROM_PUBLIC_INLINE")
+     internal inline fun <reified T> setFragment(title:String,fragment:Fragment, bundle: Bundle?) where T: BaseFragment =
+        run {
+            currentFrag = fragment
+            toolBarTitle(title)
+            this?.supportFragmentManager?.commit {
+                setReorderingAllowed(true)
+                replace<T>(R.id.fragment_container,null,bundle)
+            }
         }
     private fun attachObserver(){
         apptViewModel.isLoadingVal.observe(this, {
@@ -91,9 +108,10 @@ class MainActivity : BaseActivity() {
         })
     }
     private fun attachFragmentObserver(){
-        clickViewModel.fragmentNameVal.observe(this,{
+        clickViewModel.CurrentFrag.observe(this,{
              it?.let {
-                 onFragmentChange(it)
+                 //baseToastMessage(it.javaClass.name)
+                 currentFrag = it
              }
         })
         clickViewModel.isLoading.observe(this,{
@@ -107,7 +125,7 @@ class MainActivity : BaseActivity() {
         })
         clickViewModel.backPress.observe(this,{
             if(it){
-                checkFragmentState()
+                backToPreviousFrag()
             }
         })
         clickViewModel.apptIdVal.observe(this,{
@@ -121,10 +139,9 @@ class MainActivity : BaseActivity() {
     override fun onAttachFragment(fragment: Fragment) {
         super.onAttachFragment(fragment)
         currentFragment = fragment.tag.toString()
-        //baseToastMessage(currentFragment)
     }
     override fun onBackPressed() {
-        checkFragmentState()
+        backToPreviousFrag()
     }
     private fun UpdateFCMToken(){
         val accId = SessionManager.GetaccId
@@ -146,11 +163,33 @@ class MainActivity : BaseActivity() {
         }
         base_toolbar.setOnMenuItemClickListener {
             if(it.itemId ==R.id.qr_code_btn){
-                val qrCodeFragment = QRCodeFragment.newInstance(apptId)
-                toolBarTitle(FragmentName.CheckIn)
-                setCurrentFragmentToStack(qrCodeFragment,FragmentType.InnerFragment)
+                val bundle = bundleOf("apptId" to apptId)
+                setFragment<QRCodeFragment>(FragmentName.CheckIn, QRCodeFragment(),bundle)
             }
             true
+        }
+    }
+    private fun backToPreviousFrag(){
+        if(currentFrag is HomeFragment || currentFrag is AppointmentFragment || currentFrag is NotificationFragment || currentFrag is ProfileFragment ){
+            shuntDownApp()
+        }
+        if(currentFrag is AppointmentDetailFragment){
+            val appointmentFragment = AppointmentFragment()
+            setFragment<AppointmentFragment>(FragmentName.Appointment,appointmentFragment,null)
+        }
+        else if (currentFrag is AddAppointmentFragment){
+            setFragment<HomeFragment>(FragmentName.Home,HomeFragment(),null)
+        }
+        else if(currentFrag is EditProfileFragment || currentFrag is SwitchProfileFragment || currentFrag is NotificationPrefFragment){
+            setFragment<ProfileFragment>(FragmentName.Profile,ProfileFragment(),null)
+        }
+        else if (currentFrag is AnnouncementDetailFragment){
+            setFragment<NotificationFragment>(FragmentName.Notification,NotificationFragment(),null)
+        }
+        else if (currentFrag is QRCodeFragment || currentFrag is RescheduleFragment){
+            val bundle = bundleOf("apptId" to apptId)
+            setFragment<AppointmentDetailFragment>(FragmentName.AppointmentDetail,AppointmentDetailFragment(),bundle)
+
         }
     }
     private fun checkFragmentState(){
@@ -166,6 +205,7 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+
         if(fragment !=null){
             if(backStackFragment !=null && backStackFragment?.isAdded!! && backStackFragment.isVisible){
 

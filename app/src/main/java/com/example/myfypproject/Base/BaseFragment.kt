@@ -52,12 +52,12 @@ abstract class BaseFragment : Fragment() {
         clickViewModel.SetIsCheckIn(checkIn ,apptId)
     }
 
-    protected inline fun <reified T> setFragmentWithBackStack( fragmentRemove: Fragment?=null, type:String, bundle: Bundle?) where T: BaseFragment=
+    protected inline fun <reified T> setFragmentWithBackStack( fragment: Fragment, bundle: Bundle?) where T: BaseFragment=
         run {
+            clickViewModel.SetCurrentFragment(fragment)
             activity?.supportFragmentManager?.commit {
                 setReorderingAllowed(true)
-                replace<T>(R.id.fragment_container, tag= type,bundle)
-                    .addToBackStack(null)
+                replace<T>(R.id.fragment_container, tag= null,bundle)
             }
         }
     protected fun setFragmentWithBackStack(fragment: Fragment, fragmentRemove:Fragment?=null, type:String)=
@@ -83,13 +83,4 @@ abstract class BaseFragment : Fragment() {
             }
         }
 
-    protected fun setFragmentNoStack(fragment: Fragment, name:String)=
-            activity?.supportFragmentManager?.beginTransaction()?.apply {
-                replace(
-                    R.id.fragment_container,
-                    fragment, name
-                )
-                setReorderingAllowed(true)
-                commit()
-            }
 }

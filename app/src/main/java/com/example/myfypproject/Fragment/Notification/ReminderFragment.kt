@@ -27,9 +27,22 @@ class ReminderFragment : BaseFragment(){
     }
 
     override fun attachObserver() {
+        notificationViewModel.isLoading.observe(this,{
+            baseProgressBar(it)
+        })
         notificationViewModel.reminderListResponse.observe(this,{
             it?.let {
                 initReminderList(it)
+                if(it.size==0){
+                    reminder_empty_txt.visibility = View.VISIBLE
+                    reminder_list_listView.visibility = View.GONE
+
+                }
+                else{
+                    reminder_list_listView.visibility = View.VISIBLE
+                    reminder_empty_txt.visibility = View.GONE
+
+                }
             }
         })
     }

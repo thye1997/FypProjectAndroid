@@ -55,7 +55,7 @@ class HomeFragment : BaseFragment()  {
     }
     private fun onAddApptClick(){
         add_appt_btn.setOnClickListener{
-            setFragmentWithBackStack<AddAppointmentFragment>(null,FragmentType.InnerFragment, null)
+            setFragmentWithBackStack<AddAppointmentFragment>(AddAppointmentFragment(), null)
         }
     }
 

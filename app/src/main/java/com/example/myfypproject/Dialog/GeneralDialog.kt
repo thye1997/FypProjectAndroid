@@ -27,17 +27,6 @@ import kotlin.collections.ArrayList
 
 class GeneralDialog(private val array: Array<String>, private val title: String, private val dialogItemListener: DialogItemListener?) : DialogFragment() {
     private val userViewModel: UserViewModel by activityViewModels()
-    /*companion object {
-        fun newInstance(array: Array<String>, title:String): GeneralDialog {
-            val fragment = GeneralDialog()
-            val args = Bundle()
-             args.putStringArray("arrayss", array)
-            args.putString("title", title)
-            fragment.arguments = args
-            return fragment
-        }
-    }*/
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {

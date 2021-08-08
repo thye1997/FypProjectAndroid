@@ -8,13 +8,16 @@ import androidx.lifecycle.ViewModel
 class ClickViewModel :ViewModel(){
 
     var fragmentNameVal = MutableLiveData<String>()
+    var CurrentFrag = MutableLiveData<Fragment>()
     var isLoading = MutableLiveData<Boolean>()
     var isCheckIn = MutableLiveData<Boolean>()
     var apptIdVal = MutableLiveData<Int>()
     var fragmentTitle = MutableLiveData<String>()
     var backPress = MutableLiveData<Boolean>()
-    fun SetCurrentFragment(fragmentName:String){
-        fragmentNameVal.value = fragmentName
+
+
+    fun SetCurrentFragment(fragment: Fragment){
+        CurrentFrag.value = fragment
     }
 
     fun SetFragmentTitle(title:String){

@@ -97,10 +97,13 @@ class RegisterActivity : BaseActivity() {
             }
         })
         userViewModel.LoginResponse.observe(this,{
-            it?.let { baseToastMessage(it.message)
-                //UIVisibility(register_view_container,true)
+            it?.let {
+                baseToastMessage(it.message)
                 if(it.isSuccess){
                  LoginActivity.showLogin(this)
+                }
+                else{
+                    UIVisibility(register_view_container,true)
                 }
             }
         })

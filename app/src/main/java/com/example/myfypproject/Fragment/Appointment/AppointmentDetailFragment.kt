@@ -1,5 +1,6 @@
 package com.example.myfypproject.Fragment.Appointment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.example.myfypproject.Model.RescheduleAppointment
 import com.example.myfypproject.R
 import com.example.myfypproject.ViewModel.AppointmentViewModel
 import com.example.myfypproject.ViewModel.ClickViewModel
+import com.example.myfypproject.session.SessionManager
 import kotlinx.android.synthetic.main.fragment_appt_detail.*
 import kotlinx.android.synthetic.main.fragment_upcoming.*
 import kotlin.properties.Delegates
@@ -42,7 +44,6 @@ class AppointmentDetailFragment: BaseFragment(),View.OnClickListener {
 
     override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
         apptIds = requireArguments().getInt("apptId")
-        //var apptListData: ApptListData?
             apptListData =ApptListData(accId,apptIds,apptStatus = ApptType.upcomingVal)
         apptViewModel.AppointmentDetailData(apptListData)
     }
@@ -101,11 +102,25 @@ class AppointmentDetailFragment: BaseFragment(),View.OnClickListener {
     private fun changeApptState(state:Int){
        if(state == ApptAction.Reschedule){
            val bundle = bundleOf("apptId" to apptIds)
-           setFragmentWithBackStack<RescheduleFragment>(null,FragmentType.InnerFragment, bundle)
+           setFragmentWithBackStack<RescheduleFragment>(RescheduleFragment(), bundle)
        }
         else{
-           val rescheduleAppt = RescheduleAppointment( ApptActionType.cancel,apptIds,"","")
-            apptViewModel.RescheduleAppointment(rescheduleAppt)
+           val builder = AlertDialog.Builder(context)
+
+           builder.setMessage("Do you want to cancel appointment?")
+
+           //performing positive action
+           builder.setPositiveButton("Yes") { dialogInterface, which ->
+               val rescheduleAppt = RescheduleAppointment( ApptActionType.cancel,apptIds,"","")
+               apptViewModel.RescheduleAppointment(rescheduleAppt)           }
+           //performing cancel action
+           builder.setNegativeButton("No") { dialogInterface, which ->
+               dialogInterface.dismiss()
+           }
+           val alertDialog: AlertDialog = builder.create()
+           // Set other dialog properties
+           alertDialog.setCancelable(false)
+           alertDialog.show()
        }
     }
 

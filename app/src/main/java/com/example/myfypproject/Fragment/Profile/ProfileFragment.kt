@@ -63,22 +63,25 @@ class ProfileFragment : BaseFragment() {
     private fun notificationPrefClickListener(){
         notification_pref_layout.setOnClickListener {
             val notificationPrefFragment = NotificationPrefFragment()
-            clickViewModel.SetCurrentFragment(FragmentName.NotificationPreferences)
-            setFragmentWithBackStack(notificationPrefFragment,type =FragmentType.InnerFragment)
+            clickViewModel.SetCurrentFragment(notificationPrefFragment)
+            clickViewModel.SetFragmentTitle(FragmentName.NotificationPreferences)
+            setFragmentWithBackStack<NotificationPrefFragment>(notificationPrefFragment,null)
         }
     }
     private fun switchProfileClickListener(){
         switch_profile_layout.setOnClickListener {
             val switchProfileFragment = SwitchProfileFragment()
-            clickViewModel.SetCurrentFragment(FragmentName.SwitchProfile)
-            setFragmentWithBackStack(switchProfileFragment,type =FragmentType.InnerFragment)
+            clickViewModel.SetCurrentFragment(switchProfileFragment)
+            clickViewModel.SetFragmentTitle(FragmentName.SwitchProfile)
+            setFragmentWithBackStack<SwitchProfileFragment>(switchProfileFragment,null)
         }
     }
     private fun editProfileClickListener(){
         edit_profile_layout.setOnClickListener {
             val editProfileFragment = EditProfileFragment()
-            clickViewModel.SetCurrentFragment(FragmentName.EditProfile)
-            setFragmentWithBackStack(editProfileFragment,type =FragmentType.InnerFragment)
+            clickViewModel.SetCurrentFragment(editProfileFragment)
+            clickViewModel.SetFragmentTitle(FragmentName.EditProfile)
+            setFragmentWithBackStack<EditProfileFragment>(editProfileFragment,null)
         }
     }
 }

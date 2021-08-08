@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleRegistry
 import com.example.myfypproject.Activity.AddProfileActivity
+import com.example.myfypproject.Base.BaseFragment
 import com.example.myfypproject.Base.PreviousScreen
 import com.example.myfypproject.Fragment.Notification.NotificationListAdapter
 import com.example.myfypproject.Listener.SwitchProfileListener
@@ -23,30 +24,25 @@ import com.example.myfypproject.session.SessionManager
 import kotlinx.android.synthetic.main.fragment_switch_profile.*
 
 
-class SwitchProfileFragment : Fragment(),SwitchProfileListener {
-    val accId = SessionManager.GetaccId
+class SwitchProfileFragment : BaseFragment(),SwitchProfileListener {
     private val userViewModel: UserViewModel by viewModels()
     private  lateinit var  adapter: SwitchProfileAdapter
     private var profileList: ArrayList<ProfileListResponse> = ArrayList()
-    override fun onCreateView(
+    override fun FragmentCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         return inflater.inflate(R.layout.fragment_switch_profile, container, false)
-
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
         initScreen()
-        attachObserver()
         userViewModel.GetProfileList(accId)
 
     }
 
-    private fun attachObserver(){
+    override fun attachObserver(){
           userViewModel.ProfileListResponse.observe(viewLifecycleOwner,{
               it?.let {
                   initProfileList(it)

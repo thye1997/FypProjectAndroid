@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.myfypproject.Base.ArrayInit
 import com.example.myfypproject.Base.BaseFragment
 import com.example.myfypproject.Dialog.GeneralDialog
+import com.example.myfypproject.Listener.DialogItemListener
 import com.example.myfypproject.Model.DefaultProfileData
 import com.example.myfypproject.R
 import com.example.myfypproject.ViewModel.UserViewModel
@@ -26,9 +27,17 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class EditProfileFragment : BaseFragment(){
+class EditProfileFragment : BaseFragment(), DialogItemListener, com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener{
     private lateinit var profileData: DefaultProfileData
     private lateinit var updateProfileData: DefaultProfileData
+    val c = Calendar.getInstance()
+    val day = c.get(Calendar.DAY_OF_MONTH)
+    val month= c.get(Calendar.MONTH)
+    val year = c.get(Calendar.YEAR)
+    private lateinit var selectedDate:String
+    private var endDate: Calendar = Calendar.getInstance() //end date (today)
+    private lateinit var dps: com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+
     val userViewModel: UserViewModel by activityViewModels()
     override fun FragmentCreateView(
         inflater: LayoutInflater,
@@ -58,11 +67,6 @@ class EditProfileFragment : BaseFragment(){
                 baseProgressBar(false)
                 uiVisibility(edit_profile_constlayout, true)
                 profileData = it
-            }
-        })
-        userViewModel.relationshipVal.observe(this, {
-            it?.let {
-                edit_profile_gender_edt.setText(it)
             }
         })
     }
@@ -159,27 +163,41 @@ class EditProfileFragment : BaseFragment(){
     }
     private fun onDialogTrigger(){
         edit_profile_gender_edt.setOnClickListener {
-            childFragmentManager?.let { GeneralDialog(ArrayInit.gender,"Gender",null).show(it, "") }
+            activity?.supportFragmentManager?.let { GeneralDialog(ArrayInit.gender,"Gender",this).show(it, "") }
         }
         edit_profile_dob_edt.setOnClickListener {
             val c = Calendar.getInstance()
             val year = c.get(Calendar.YEAR)
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
-            val dpd =
-                context?.let { it1 ->
-                    DatePickerDialog(it1,R.style.MyDatePickerStyle, { view, year, monthOfYear, dayOfMonth ->
-                        val month =monthOfYear+1
-                        val dateChose = "$year-$month-$dayOfMonth"
-                        edit_profile_dob_edt.setText(dateChose)
-                    }, year, month, day)
-                }
-            dpd?.show()
+            dps = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(
+                this,
+                year, month, day
+            )
+            dps.setAccentColor("#149ffc")
+            dps.maxDate = endDate
+            activity?.supportFragmentManager?.let { it1 -> dps.show(it1, "Datepickerdialog") }
         }
     }
-    /*private fun dateToCalendar(date: Date): Calendar {
-        val calendar = Calendar.getInstance()
-        calendar.time = date
-        return calendar
-    }*/
+
+    override fun onSelectedCallBack(position: Int) {
+    }
+
+    override fun onSelectedCallBack(value: String) {
+        edit_profile_gender_edt.setText(value)
+    }
+
+    override fun onGeneralSelectedCallBack(position: Int, type: String) {
+    }
+
+    override fun onDateSet(
+        view: com.wdullaer.materialdatetimepicker.date.DatePickerDialog?,
+        year: Int,
+        monthOfYear: Int,
+        dayOfMonth: Int
+    ) {
+        val month = monthOfYear+1
+        selectedDate= "$dayOfMonth/$month/$year"
+        edit_profile_dob_edt.setText(selectedDate)
+    }
 }

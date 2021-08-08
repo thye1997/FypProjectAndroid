@@ -19,6 +19,7 @@ import com.example.myfypproject.ViewModel.AppointmentViewModel
 import com.example.myfypproject.ViewModel.ClickViewModel
 import com.example.myfypproject.ViewModel.UserViewModel
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import kotlinx.android.synthetic.main.fragment_add_appt.*
 import kotlinx.android.synthetic.main.fragment_reschedule.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,6 +38,12 @@ class RescheduleFragment(): BaseFragment(), View.OnClickListener, DatePickerDial
     private  var specificSlotList: ArrayList<SpecificSlotListResponse> = ArrayList()
     private  var specificSlotFormatted:ArrayList<String> = ArrayList()
     private var startDate: Calendar = Calendar.getInstance() //today date
+    private var endDate: Calendar = Calendar.getInstance() //end date
+    val c = Calendar.getInstance()
+    val day = c.get(Calendar.DAY_OF_MONTH)
+    val month= c.get(Calendar.MONTH)
+    val year = c.get(Calendar.YEAR)
+    private lateinit var dps: DatePickerDialog
     override fun FragmentCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,9 +53,13 @@ class RescheduleFragment(): BaseFragment(), View.OnClickListener, DatePickerDial
     }
 
     override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
+        uiVisibility(resch_appt_rel_layout,false)
+        baseProgressBar(true)
         apptViewModel.AppointmentScheduleData()
         slotList = resources.getStringArray(R.array.slots_array)
         apptId = requireArguments().getInt("apptId")
+        clickViewModel.SetIsCheckIn(false, apptId)
+        reschedule_confirm_btn.setOnClickListener(this)
     }
 
     override fun attachObserver() {
@@ -57,6 +68,30 @@ class RescheduleFragment(): BaseFragment(), View.OnClickListener, DatePickerDial
             reschedule_date_Edt.setOnClickListener(this)
             spHolidayList = it.spHolidayList
             offDay = it.offDay
+
+            dps = DatePickerDialog.newInstance(
+                this,
+                year, month, day
+            )
+            val sdf = SimpleDateFormat("dd/MM/yyyy")
+            val getCurrentDateTime: String = sdf.format(Date())
+            var skipDate = 0
+            for(date in spHolidayList){
+                val nextDay = SimpleDateFormat("dd/MM/yyyy").parse(date.date)
+
+                val today =SimpleDateFormat("dd/MM/yyyy").parse(getCurrentDateTime)
+                val dateDiff = java.util.concurrent.TimeUnit.DAYS.convert(nextDay.time - today.time, java.util.concurrent.TimeUnit.MILLISECONDS).toInt()
+                if(dateDiff ==1 || (dateDiff in 2..0) ){
+                    skipDate ++
+                }
+            }
+            startDate.set(Calendar.DATE, day+ skipDate)
+            endDate.set(Calendar.YEAR, year+1)
+            dps.minDate = startDate
+            dps.maxDate = endDate
+            disableDays()
+            uiVisibility(resch_appt_rel_layout,true)
+            baseProgressBar(false)
         })
         apptViewModel.specificSlotListResponse.observe(this,{
                initSpecificSlot(it)
@@ -72,42 +107,46 @@ class RescheduleFragment(): BaseFragment(), View.OnClickListener, DatePickerDial
         reschedule_date_Edt.isFocusable = true
         reschedule_date_Edt.isEnabled = true
     }
-    private fun openDatePickerDialog(){
-        val c = Calendar.getInstance()
-        val day = c.get(Calendar.DAY_OF_MONTH)
-        val month= c.get(Calendar.MONTH)
-        val year = c.get(Calendar.YEAR)
-        val dps = DatePickerDialog.newInstance(
-            this,
-            year, month, day
-        )
-        startDate.set(Calendar.DATE, day + 1)
-        dps.minDate = startDate
+
+    private fun disableDays(){
         var maxDate = Calendar.getInstance()
-        maxDate.set(Calendar.YEAR, year + 1)
+        //var disableDays = disableSpecificDaysArray()
+        maxDate.set(Calendar.YEAR, year)
         val loopdate = startDate
-        while (startDate.before(maxDate))
+        var oneYear = 365
+        while (oneYear >0)
         {
-                val dayOfWeek = loopdate.get(Calendar.DAY_OF_WEEK)
-                var date:Date?
-                if(offDay!=null){
-                    for(i in 0 until offDay.size){
-                        if(dayOfWeek == offDay[i]+1){
-                            val dates: ArrayList<Calendar> = ArrayList()
-                            dates.add(loopdate)
-                            dps.disabledDays = dates.toTypedArray()
-                        }
+            val dayOfWeek = loopdate.get(Calendar.DAY_OF_WEEK)
+            var date:Date?
+            if(offDay!=null){
+                for(i in 0 until offDay.size){
+                    if(dayOfWeek == offDay[i]+1){
+                        val dates: ArrayList<Calendar> = ArrayList()
+                        dates.add(loopdate)
+                        dps.disabledDays = dates.toTypedArray()
                     }
                 }
-                startDate.add(Calendar.DATE, 1)
-        }
-        dps.setAccentColor("#149ffc")
-      var disableDays = disableSpecificDaysArray()
-        if(disableDays!=null){
-            if(disableDays?.size!! >0){
-                dps.disabledDays = disableSpecificDaysArray()
             }
+            if(spHolidayList!=null) {
+                val specificDate: ArrayList<Calendar> = ArrayList()
+                for (n in spHolidayList) {
+                    val sdf = SimpleDateFormat("dd/MM/yyyy")
+                    val currentDate = sdf.format(loopdate.time)
+                    val currDate =SimpleDateFormat("dd/MM/yyyy").parse(currentDate)
+                    val nextDay = SimpleDateFormat("dd/MM/yyyy").parse(n.date)
+                    val dateDiff = java.util.concurrent.TimeUnit.DAYS.convert(nextDay.time - currDate.time, java.util.concurrent.TimeUnit.MILLISECONDS).toInt()
+                    if (dateDiff ==0) {
+                        specificDate.add(loopdate)
+                        dps.disabledDays = specificDate.toTypedArray()
+                    }
+                }
+            }
+            startDate.add(Calendar.DATE, 1)
+            oneYear-=1
         }
+    }
+    private fun openDatePickerDialog(){
+        dps.setAccentColor("#149ffc")
         activity?.supportFragmentManager?.let { it1 -> dps.show(it1, "Datepickerdialog") };
     }
     private fun openSlotDialog(){
@@ -128,7 +167,7 @@ class RescheduleFragment(): BaseFragment(), View.OnClickListener, DatePickerDial
         var disableDays:Array<Calendar>? = null
         for (i in 0 until spHolidayList.count()) {
             date = sdf.parse(spHolidayList[i].date)
-
+            baseToastMessage(date.toString())
             startDate = dateToCalendar(date)
             val dates: MutableList<Calendar> = ArrayList()
 
@@ -176,8 +215,18 @@ class RescheduleFragment(): BaseFragment(), View.OnClickListener, DatePickerDial
         }
     }
     private fun rescheduleRequest(){
-        val rescheduleAppt = RescheduleAppointment( ApptActionType.reschedule,apptId,selectedDate,selectedTimeSlot)
-        apptViewModel.RescheduleAppointment(rescheduleAppt)
+        if(::selectedDate.isInitialized && ::selectedTimeSlot.isInitialized ) {
+            val rescheduleAppt = RescheduleAppointment(
+                ApptActionType.reschedule,
+                apptId,
+                selectedDate,
+                selectedTimeSlot
+            )
+            apptViewModel.RescheduleAppointment(rescheduleAppt)
+        }
+        else{
+            baseToastMessage("Not all required fields are filled.")
+        }
     }
     override fun onClick(v: View?) {
         when(v?.id){
@@ -205,7 +254,6 @@ class RescheduleFragment(): BaseFragment(), View.OnClickListener, DatePickerDial
                 reschedule_time_edt.setText(specificSlotList[i].slot)
             }
         }
-        reschedule_confirm_btn.setOnClickListener(this)
     }
     override fun onSelectedCallBack(value: String) {
         reschedule_slot_Edt.setText(value)

@@ -83,7 +83,6 @@ class SwitchProfileAdapter(private val context: Context, private val itemList: A
         return view
     }
     private fun DeleteProfile(deleteBtn :AppCompatButton, position: Int){
-        Toast.makeText(context, "index =>$position arraylistsize=> ${itemList.count()}", Toast.LENGTH_SHORT).show()
             val builder = AlertDialog.Builder(context)
             builder.setMessage("Delete this profile?")
             //performing positive action

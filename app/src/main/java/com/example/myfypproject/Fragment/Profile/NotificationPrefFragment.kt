@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import com.example.myfypproject.Base.BaseFragment
 import com.example.myfypproject.Model.GeneralResponse
 import com.example.myfypproject.Model.NotificationPrefsResponse
 import com.example.myfypproject.Model.UpdateNotificationPrefsRequest
@@ -25,33 +26,32 @@ import com.example.myfypproject.session.SessionManager
 import kotlinx.android.synthetic.main.fragment_notification_pref.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 
-class NotificationPrefFragment : Fragment(),CompoundButton.OnCheckedChangeListener {
+class NotificationPrefFragment : BaseFragment(),CompoundButton.OnCheckedChangeListener {
     var app_push_val:Boolean= false
     var appt_push_val:Boolean= false
     var app_sms_push_val:Boolean= false
-    var accId = SessionManager.GetaccId
     private val userViewModel: UserViewModel by viewModels()
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    override fun FragmentCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         return inflater.inflate(R.layout.fragment_notification_pref, container, false)
     }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
+    override fun FragmentCreatedView(view: View, savedInstanceState: Bundle?) {
         app_push_toggle.setOnCheckedChangeListener(null)
         appt_app_push_toggle.setOnCheckedChangeListener(null)
         appt_sms_push_toggle.setOnCheckedChangeListener(null)
-        attachObserver()
         userViewModel.GetNotificationPrefs(SessionManager.GetaccId)
     }
+
     private fun initScreen(){
         app_push_toggle.setOnCheckedChangeListener(this)
         appt_app_push_toggle.setOnCheckedChangeListener(this)
         appt_sms_push_toggle.setOnCheckedChangeListener(this)
     }
-    private fun attachObserver(){
+    override fun attachObserver(){
         userViewModel.notificationPrefsResponse.observe(viewLifecycleOwner,{
             it?.let {
                 switchButtonState(it)

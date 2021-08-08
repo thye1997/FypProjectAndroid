@@ -75,10 +75,10 @@ class UpcomingFragment(private val apptType:Int) : BaseFragment() {
     }
     private fun initItemSelectedListener(it:ArrayList<ApptListData>){
         upcoming_list_listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            clickViewModel.SetCurrentFragment(FragmentName.AppointmentDetail)
             val fragment = AppointmentDetailFragment.newInstance(
                 it[position].apptId
             )
+            clickViewModel.SetCurrentFragment(fragment)
             setFragmentWithBackStack(fragment,type = FragmentType.InnerFragment)
         }
     }

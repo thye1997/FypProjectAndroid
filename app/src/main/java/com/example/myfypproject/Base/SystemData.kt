@@ -4,7 +4,8 @@ import com.example.myfypproject.Activity.LoginActivity
 
 object BaseUrl{
     //val url = "http://192.168.68.101:81/api/"
-    val url = "http://192.168.68.101:45455/api/"
+    //val url = "http://192.168.68.103:45455/api/"
+    val url ="https://fypproject.conveyor.cloud/api/"
 }
 
 object PreviousScreen{
@@ -26,7 +27,6 @@ enum class Relationship {
 
 object RelationshipArray{
     val relationshipArray= arrayOf("Self","Mother","Father","GrandFather", "GrandMother")
-
 }
 
 object FragmentName {
@@ -40,6 +40,7 @@ object FragmentName {
     val AppointmentDetail = "Appointment Detail"
     val AddAppointment ="Add Appointment"
     val CheckIn = "Check In"
+    val QRCode = "QR Code"
     val Reschedule = "Reschedule"
 }
 

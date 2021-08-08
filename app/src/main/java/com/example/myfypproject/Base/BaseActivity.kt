@@ -19,7 +19,6 @@ import com.example.myfypproject.session.SessionManager
 import kotlinx.android.synthetic.main.activity_login.*
 
 abstract class BaseActivity : AppCompatActivity() {
-    lateinit var screenTitle: TextView
     lateinit var baseToolbar : Toolbar
     lateinit var baseToolbarTitle: TextView
     abstract var titleOfView : String
@@ -37,7 +36,6 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private fun bindViews() {
-        //screenTitle = findViewById(R.id.baseTitle)
         baseToolbar = findViewById(R.id.base_toolbar)
         baseToolbarTitle = findViewById(R.id.toolbar_title)
         progressBar = findViewById(R.id.base_progressBar)
@@ -97,18 +95,4 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    protected fun baseDialog(title: String, body: String){
-        val builder = AlertDialog.Builder(this)
-        builder.setMessage("Hi")
-            .setPositiveButton("Ok",
-                DialogInterface.OnClickListener { dialog, id ->
-                })
-            .setNegativeButton("No",
-                DialogInterface.OnClickListener { dialog, id ->
-                    // User cancelled the dialog
-                })
-        // Create the AlertDialog object and return it
-        builder.create()
-
-    }
 }

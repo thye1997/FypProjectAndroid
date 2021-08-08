@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
+    android:id="@+id/resch_appt_rel_layout"
     >
     <TextView
         android:id="@+id/reschedule_title"
@@ -22,7 +23,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:hint="Date"
+        android:hint="@string/Appt_date"
         android:layout_below="@id/reschedule_title"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         >
@@ -45,7 +46,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp"
-        android:hint="Select Slot"
+        android:hint="@string/appt_select_slot"
         android:layout_below="@id/reschedule_date_txtLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         >
@@ -67,7 +68,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp"
-        android:hint="Select time"
+        android:hint="@string/appt_select_time"
         android:layout_below="@id/reschedule_slot_txtLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         >

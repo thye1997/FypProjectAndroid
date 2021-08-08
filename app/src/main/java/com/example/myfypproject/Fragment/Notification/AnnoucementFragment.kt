@@ -30,9 +30,15 @@ class AnnouncementFragment : BaseFragment() {
     }
 
     override fun attachObserver(){
+        notificationViewModel.isLoading.observe(viewLifecycleOwner,{
+            baseProgressBar(it)
+        })
         notificationViewModel.notificationListResponse.observe(viewLifecycleOwner, {
             it?.let {
                     initAnnouncementList(it)
+                if(it.size==0){
+                    announcement_empty_txt.visibility = View.VISIBLE
+                }
             }
         })
     }
@@ -44,7 +50,7 @@ class AnnouncementFragment : BaseFragment() {
                 "body" to list[position].body,
                 "date" to list[position].date
             )
-            setFragmentWithBackStack<AnnouncementDetailFragment>(type =FragmentType.InnerFragment,fragmentRemove = null, bundle = bundle)
+            setFragmentWithBackStack<AnnouncementDetailFragment>(AnnouncementDetailFragment(),bundle)
             }
         if(list.count()>0){
             announcement_list_listView.visibility= View.VISIBLE
