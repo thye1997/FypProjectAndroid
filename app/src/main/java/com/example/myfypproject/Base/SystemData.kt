@@ -6,6 +6,7 @@ object BaseUrl{
     //val url = "http://192.168.68.101:81/api/"
     //val url = "http://192.168.68.103:45455/api/"
     val url ="https://fypproject.conveyor.cloud/api/"
+    //val asdasdasd
 }
 
 object PreviousScreen{
